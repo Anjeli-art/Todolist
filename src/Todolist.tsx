@@ -13,8 +13,9 @@ type TodolistType = {
     tasks: Array<TaskType>
     taskDelet: (idTask: string) => void
     taskChanged: (value: filterType) => void
-    changeStatus: () => void
+    changeStatus: (idTask: string, isDone: boolean) => void
     addTask: (title: string) => void
+    filter: filterType
 }
 
 export function Todolist(props: TodolistType) {
@@ -23,15 +24,21 @@ export function Todolist(props: TodolistType) {
 
     const inputHandlerCnange = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
-
     }
 
+    let [error, setError] = useState<string | null>(null)
+
     const addTask = () => {
-        props.addTask(title)
-        setTitle("")
+        if (title.trim() !== "") {
+            props.addTask(title.trim())
+            setTitle("")
+        } else {
+            setError("title is required")
+        }
     }
 
     const onEnterHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+        setError(null)
         if (e.charCode === 13) {
             addTask()
         }
@@ -51,24 +58,35 @@ export function Todolist(props: TodolistType) {
         <div>
             <h3>{props.title}</h3>
             <div>
-                <input value={title} onChange={inputHandlerCnange} onKeyPress={onEnterHandler}/>
+                <input value={title} onChange={inputHandlerCnange} onKeyPress={onEnterHandler}
+                       className={error ? "error" : ""}/>
                 <button onClick={addTask}>+</button>
+                {error && <div className={"error-message"}>{error}</div>}
             </div>
             <ul>
                 {props.tasks.map(el => {
                         const deletedTask = () => {
                             props.taskDelet(el.id)
                         }
-                        return <li key={el.id}><input type="checkbox" checked={el.isDone}/>
+                        const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => props.changeStatus(el.id, e.currentTarget.checked)
+                        return <li key={el.id} className={el.isDone ? "is-done" : ""}>
+                            <input type="checkbox"
+                                   checked={el.isDone}
+                                   onChange={onChangeHandler}/>
                             <button onClick={deletedTask}>x</button>
                             {el.title}</li>
                     }
                 )}
             </ul>
             <div>
-                <button onClick={onButtonFilterClick1}>all</button>
-                <button onClick={onButtonFilterClick2}>active</button>
-                <button onClick={onButtonFilterClick3}>complited</button>
+                <button className={props.filter === "all" ? "active-filter" : ""} onClick={onButtonFilterClick1}>all
+                </button>
+                <button className={props.filter === "active" ? "active-filter" : ""}
+                        onClick={onButtonFilterClick2}>active
+                </button>
+                <button className={props.filter === "complited" ? "active-filter" : ""}
+                        onClick={onButtonFilterClick3}>complited
+                </button>
             </div>
         </div>
 

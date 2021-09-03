@@ -40,8 +40,12 @@ function App() {
         Settask(newTasks)
     }
 
-    let changeStatus = () => {
-
+    let changeStatus = (idTask: string, isDone: boolean) => {
+        let newTask = tasks.find(el => el.id === idTask)
+        if (newTask) {
+            newTask.isDone = isDone
+        }
+        Settask([...tasks])
     }
 
 
@@ -52,7 +56,9 @@ function App() {
                       taskDelet={taskDelet}
                       taskChanged={taskChanged}
                       addTask={addTask}
-                      changeStatus={changeStatus}/>
+                      changeStatus={changeStatus}
+                      filter={filter}
+            />
         </div>
 
     );
