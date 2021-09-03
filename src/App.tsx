@@ -1,26 +1,16 @@
 import React from 'react';
 import './App.css';
+import {Todolist} from "./Todolist";
 
 function App() {
+    let task = [{id: 1, title: "html", isDone: true},
+        {id: 2, title: "html", isDone: true},
+        {id: 3, title: "html", isDone: true}]
+
+
     return (
         <div className="App">
-            <div>
-                <h3>What to learn</h3>
-                <div>
-                    <input/>
-                    <button></button>
-                </div>
-                <ul>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                </ul>
-                <div>
-                    <button>all</button>
-                    <button>active</button>
-                    <button>complited</button>
-                </div>
-            </div>
+            <Todolist title={"what to learn"} task={task}/>
         </div>
 
     );
