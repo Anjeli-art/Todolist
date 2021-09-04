@@ -13,3 +13,11 @@
 .is-done {
     opacity: 0.5;
 }
+
+.App{
+    display: flex;
+    padding: 20px;
+}
+.todo{
+    margin: 20px;
+}
