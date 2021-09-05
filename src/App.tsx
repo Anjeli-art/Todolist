@@ -3,6 +3,8 @@ import './App.css';
 import {TaskType, Todolist} from "./Todolist";
 import {v1} from "uuid";
 import {Additemform} from "./Additemform";
+import {AppBar, Box, Button, Container, Grid, IconButton, Toolbar, Typography} from "@material-ui/core";
+import MenuIcon from '@material-ui/icons/Menu'
 
 
 export type filterType = "all" | "active" | "complited"
@@ -85,9 +87,9 @@ function App() {
         }
     }
     const titleTodoStatus = (todolistid: string, Newvalue: string) => {
-        const todo = todolist.find(el=>el.id===todolistid)
-        if(todo){
-            todo.title=Newvalue
+        const todo = todolist.find(el => el.id === todolistid)
+        if (todo) {
+            todo.title = Newvalue
         }
         setTodolist([...todolist])
     }
@@ -105,32 +107,50 @@ function App() {
     // }
 
     return (
-        <div className="App">
-            <Additemform callback={addTodo}/>
-            {todolist.map(el => {
-                let taskfortodolist = tasks[el.id]
+        <Box style={{background: "#80cbc4",height: "100vh"}}>
+            <AppBar position="static" style={{backgroundColor: "#ffca28", padding: "20px"}}>
+                <Toolbar>
+                    <IconButton edge="start" color="inherit" aria-label="menu">
+                        <MenuIcon/>
+                    </IconButton>
+                    <Typography variant="h2" style={{margin: "0px 40px 0px 40px"}}>
+                        Todolist
+                    </Typography>
+                    <Button color="inherit">Login</Button>
+                </Toolbar>
+            </AppBar>
+            <Container style={{marginTop: "20px"}}>
+                <Grid container style={{padding:"20px"}}>
+                    <Additemform callback={addTodo} />
+                </Grid>
+                <Grid container spacing={3}>
+                    {todolist.map(el => {
+                        let taskfortodolist = tasks[el.id]
 
-                if (el.filter === "complited") {
-                    taskfortodolist = taskfortodolist.filter(el => el.isDone)
-                }
-                if (el.filter === "active") {
-                    taskfortodolist = taskfortodolist.filter(el => !el.isDone)
-                }
-                return <Todolist title={el.title}
-                                 key={el.id}
-                                 todolistid={el.id}
-                                 tasks={taskfortodolist}
-                                 removeTask={removeTask}
-                                 taskChanged={taskChanged}
-                                 addTask={addTask}
-                                 changeStatus={changeStatus}
-                                 filter={el.filter}
-                                 removeTodo={removeTodo}
-                                 changeTaskTitle={changeTaskTitle}
-                                 titleTodoStatus={titleTodoStatus}
-                />
-            })}
-        </div>)
+                        if (el.filter === "complited") {
+                            taskfortodolist = taskfortodolist.filter(el => el.isDone)
+                        }
+                        if (el.filter === "active") {
+                            taskfortodolist = taskfortodolist.filter(el => !el.isDone)
+                        }
+                        return <Grid item>
+                            <Todolist title={el.title}
+                                      key={el.id}
+                                      todolistid={el.id}
+                                      tasks={taskfortodolist}
+                                      removeTask={removeTask}
+                                      taskChanged={taskChanged}
+                                      addTask={addTask}
+                                      changeStatus={changeStatus}
+                                      filter={el.filter}
+                                      removeTodo={removeTodo}
+                                      changeTaskTitle={changeTaskTitle}
+                                      titleTodoStatus={titleTodoStatus}
+                            />
+                        </Grid>
+                    })}</Grid>
+            </Container>
+        </Box>)
 }
 
 export default App;

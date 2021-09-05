@@ -1,4 +1,5 @@
 import React, {ChangeEvent, useState} from "react";
+import {Input} from "@material-ui/core";
 
 export type EditablespanType = {
     title: string
@@ -16,7 +17,8 @@ export function Editablespan(props: EditablespanType) {
         setTitle(e.currentTarget.value)
     }
     return (
-        editmode ? <input value={title} onChange={onChangeHandler} onBlur={activaiteViewMode} autoFocus/>
+        // eslint-disable-next-line react/jsx-no-undef
+        editmode ? <Input value={title} onChange={onChangeHandler} onBlur={activaiteViewMode} autoFocus/>
             : <span onDoubleClick={activaiteEditMode}>{props.title}</span>
     )
 

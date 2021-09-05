@@ -1,7 +1,10 @@
+import {Button, createMuiTheme, Input, TextField} from '@material-ui/core';
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 
+
+
 export type AdditemformPropsType = {
-    callback:(title: string)=>void
+    callback: (title: string) => void
 }
 
 export const Additemform = (props: AdditemformPropsType) => {
@@ -28,13 +31,16 @@ export const Additemform = (props: AdditemformPropsType) => {
             setError("title is required")
         }
     }
+
+
     return (
 
         <div>
-            <input value={title} onChange={inputHandlerCnange} onKeyPress={onEnterHandler}
-                   className={error ? "error" : ""}/>
-            <button onClick={addTask}>+</button>
-            {error && <div className={"error-message"}>{error}</div>}
+            <TextField variant={"outlined"} value={title} onChange={inputHandlerCnange} onKeyPress={onEnterHandler}
+                       label={"Type value"} error={!!error} helperText={error}/>
+            <Button onClick={addTask} variant={"contained"} color={"primary"}
+                    style={{backgroundColor: "#ffca28", fontSize: "10px", padding: "18px 0px 18px 0px"}}>+</Button>
+
         </div>
 
     );

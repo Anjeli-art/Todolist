@@ -1,23 +1,8 @@
-.error {
-    border: red 1px solid;
-}
 
-.error-message {
-    color: red;
-}
-
-.active-filter {
-    background-color: aquamarine;
-}
 
 .is-done {
     opacity: 0.5;
 }
 
-.App{
-    display: flex;
-    padding: 20px;
-}
-.todo{
-    margin: 20px;
-}
+
+

@@ -2,6 +2,8 @@ import React, {ChangeEvent} from "react";
 import {filterType} from "./App";
 import {Additemform} from "./Additemform";
 import {Editablespan} from "./Editablespan";
+import {Box, Button, Checkbox, IconButton} from "@material-ui/core";
+import DeleteIcon from '@material-ui/icons/Delete';
 
 
 export type TaskType = {
@@ -20,9 +22,10 @@ type TodolistType = {
     filter: filterType
     todolistid: string
     removeTodo: (todolistid: string) => void
-    changeTaskTitle:(id:string,Newvalue:string ,todolistid:string)=>void
-    titleTodoStatus:(todolistid:string,Newvalue: string)=>void
+    changeTaskTitle: (id: string, Newvalue: string, todolistid: string) => void
+    titleTodoStatus: (todolistid: string, Newvalue: string) => void
 }
+
 
 export function Todolist(props: TodolistType) {
 
@@ -40,40 +43,53 @@ export function Todolist(props: TodolistType) {
         props.addTask(title, props.todolistid)
     }
 
-    const onChangeTitleTodo=(Newvalue: string)=>{props.titleTodoStatus(props.todolistid,Newvalue)}
+    const onChangeTitleTodo = (Newvalue: string) => {
+        props.titleTodoStatus(props.todolistid, Newvalue)
+    }
     return (
-        <div className="todo">
+        <Box boxShadow={10} style={{padding: "15px",border:"3px #ffca28 solid",borderRadius:"10px",backgroundColor:"white"}}>
             <h3>
                 <Editablespan title={props.title} onChange={onChangeTitleTodo}/>
-                <button onClick={handlerTodoList}>x</button>
+                <IconButton aria-label="delete" color="default" onClick={handlerTodoList}>
+                    <DeleteIcon/>
+                </IconButton>
             </h3>
             <Additemform callback={addTask}/>
-            <ul>
+            <ul >
                 {props.tasks.map(el => {
                         const deletedTask = () => {
                             props.removeTask(el.id, props.todolistid)
                         }
                         const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => props.changeStatus(el.id, e.currentTarget.checked, props.todolistid)
-                        const onChangeStatusHendler = (Newvalue: string) => {props.changeTaskTitle(el.id,Newvalue , props.todolistid)}
-                        return <li key={el.id} className={el.isDone ? "is-done" : ""}>
-                            <input type="checkbox" checked={el.isDone} onChange={onChangeHandler}/>
-                            <button onClick={deletedTask}>x</button>
+                        const onChangeStatusHendler = (Newvalue: string) => {
+                            props.changeTaskTitle(el.id, Newvalue, props.todolistid)
+                        }
+                        return <li style={{ listStyleType: "none" }} key={el.id} className={el.isDone ? "is-done" : ""}>
+                            <Checkbox
+                                checked={el.isDone} onChange={onChangeHandler}
+                                color="default"
+                                inputProps={{'aria-label': 'checkbox with default color'}}
+                            />
+                            <IconButton aria-label="delete" color="default" onClick={deletedTask}>
+                                <DeleteIcon/>
+                            </IconButton>
                             <Editablespan title={el.title} onChange={onChangeStatusHendler}/>
                         </li>
                     }
                 )}
             </ul>
             <div>
-                <button className={props.filter === "all" ? "active-filter" : ""} onClick={onButtonFilterClick1}>all
-                </button>
-                <button className={props.filter === "active" ? "active-filter" : ""}
+                <Button variant={props.filter === "all" ? "contained" : "text"} style={{padding: "2px",}}
+                        onClick={onButtonFilterClick1}>all
+                </Button>
+                <Button variant={props.filter === "active" ? "contained" : "text"} style={{padding: "2px"}}
                         onClick={onButtonFilterClick2}>active
-                </button>
-                <button className={props.filter === "complited" ? "active-filter" : ""}
+                </Button>
+                <Button variant={props.filter === "complited" ? "contained" : "text"} style={{padding: "2px"}}
                         onClick={onButtonFilterClick3}>complited
-                </button>
+                </Button>
             </div>
-        </div>
+        </Box>
 
     )
 
