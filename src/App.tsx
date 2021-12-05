@@ -7,8 +7,8 @@ import {AppBar, Box, Button, Container, Grid, IconButton, Toolbar, Typography} f
 import MenuIcon from '@material-ui/icons/Menu'
 
 
-export type filterType = "all" | "active" | "complited"
-export type TodollistType = { id: string, title: string, filter: filterType }
+export type filterType = "all" | "active" | "completed"
+export type TodolistType = { id: string, title: string, filter: filterType }
 export type TaskStateType = {
     [key: string]: Array<TaskType>
 }
@@ -17,7 +17,7 @@ function App() {
     let todolist1 = v1()
     let todolist2 = v1()
 
-    let [todolist, setTodolist] = useState<Array<TodollistType>>([
+    let [todolist, setTodolist] = useState<Array<TodolistType>>([
         {id: todolist1, title: "what to learn", filter: "all"}, {
             id: todolist2, title: "what to bye", filter: "active"
         }])
@@ -36,19 +36,24 @@ function App() {
         })
 
 
-    let removeTask = (idTask: string, todolistid: string) => {
-        let todotasks = tasks[todolistid]
-        tasks[todolistid] = todotasks.filter(el => el.id !== idTask)
-        Settask({...tasks})
-    }
     let removeTodo = (todolistid: string) => {
-        let filtertodo = todolist.filter(el => el.id !== todolistid)
-        setTodolist(filtertodo)
+        setTodolist(todolist.filter(el => el.id !== todolistid))
         delete tasks[todolistid]
         Settask({...tasks})
     }
-
-    let taskChanged = (value: filterType, todolistid: string) => {
+    const titleTodoStatus = (todolistid: string, Newvalue: string) => {
+        const todo = todolist.find(el => el.id === todolistid)
+        if (todo) {
+            todo.title = Newvalue
+        }
+        setTodolist([...todolist])
+    }
+    let addTodo = (title: string) => {
+        const todo: TodolistType = {id: v1(), title: title, filter: "all"}
+        setTodolist([todo, ...todolist])
+        Settask({[todo.id]: [], ...tasks})
+    }
+    let TodoChanged = (value: filterType, todolistid: string) => {
         let todolistNew = todolist.find(el => el.id === todolistid)
         if (todolistNew) {
             todolistNew.filter = value
@@ -56,6 +61,11 @@ function App() {
         }
     }
 
+    let removeTask = (idTask: string, todolistid: string) => {
+        let todotasks = tasks[todolistid]
+        tasks[todolistid] = todotasks.filter(el => el.id !== idTask)
+        Settask({...tasks})
+    }
 
     let addTask = (title: string, todolistid: string) => {
         const task = {id: v1(), title: title, isDone: false}
@@ -64,11 +74,6 @@ function App() {
         Settask({...tasks})
     }
 
-    let addTodo = (title: string) => {
-        const todo: TodollistType = {id: v1(), title: title, filter: "all"}
-        setTodolist([todo, ...todolist])
-        Settask({[todo.id]: [], ...tasks})
-    }
 
     let changeStatus = (idTask: string, isDone: boolean, todolistid: string) => {
         const tasksobj = tasks[todolistid]
@@ -86,13 +91,7 @@ function App() {
             Settask({...tasks})
         }
     }
-    const titleTodoStatus = (todolistid: string, Newvalue: string) => {
-        const todo = todolist.find(el => el.id === todolistid)
-        if (todo) {
-            todo.title = Newvalue
-        }
-        setTodolist([...todolist])
-    }
+
 
     // let changeTaskTitle = (id: string, Newvalue:string, todolistid: string) => { //моя функция
     //     const tasksobj = tasks[todolistid]
@@ -107,7 +106,7 @@ function App() {
     // }
 
     return (
-        <Box style={{background: "#80cbc4",height: "100vh"}}>
+        <Box >
             <AppBar position="static" style={{backgroundColor: "#ffca28", padding: "20px"}}>
                 <Toolbar>
                     <IconButton edge="start" color="inherit" aria-label="menu">
@@ -120,14 +119,14 @@ function App() {
                 </Toolbar>
             </AppBar>
             <Container style={{marginTop: "20px"}}>
-                <Grid container style={{padding:"20px"}}>
-                    <Additemform callback={addTodo} />
+                <Grid container style={{padding: "20px"}}>
+                    <Additemform callback={addTodo}/>
                 </Grid>
                 <Grid container spacing={3}>
                     {todolist.map(el => {
                         let taskfortodolist = tasks[el.id]
 
-                        if (el.filter === "complited") {
+                        if (el.filter === "completed") {
                             taskfortodolist = taskfortodolist.filter(el => el.isDone)
                         }
                         if (el.filter === "active") {
@@ -139,7 +138,7 @@ function App() {
                                       todolistid={el.id}
                                       tasks={taskfortodolist}
                                       removeTask={removeTask}
-                                      taskChanged={taskChanged}
+                                      TodoChanged={TodoChanged}
                                       addTask={addTask}
                                       changeStatus={changeStatus}
                                       filter={el.filter}

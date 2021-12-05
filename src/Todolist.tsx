@@ -16,7 +16,7 @@ type TodolistType = {
     title: string
     tasks: Array<TaskType>
     removeTask: (idTask: string, todolistid: string) => void
-    taskChanged: (value: filterType, todolistid: string) => void
+    TodoChanged: (value: filterType, todolistid: string) => void
     changeStatus: (idTask: string, isDone: boolean, todolistid: string) => void
     addTask: (title: string, todolistid: string) => void
     filter: filterType
@@ -30,13 +30,13 @@ type TodolistType = {
 export function Todolist(props: TodolistType) {
 
     const onButtonFilterClick1 = () => {
-        props.taskChanged("all", props.todolistid)
+        props.TodoChanged("all", props.todolistid)
     }
     const onButtonFilterClick2 = () => {
-        props.taskChanged("active", props.todolistid)
+        props.TodoChanged("active", props.todolistid)
     }
     const onButtonFilterClick3 = () => {
-        props.taskChanged("complited", props.todolistid)
+        props.TodoChanged("completed", props.todolistid)
     }
     const handlerTodoList = () => props.removeTodo(props.todolistid)
     const addTask = (title: string) => {
@@ -85,7 +85,7 @@ export function Todolist(props: TodolistType) {
                 <Button variant={props.filter === "active" ? "contained" : "text"} style={{padding: "2px"}}
                         onClick={onButtonFilterClick2}>active
                 </Button>
-                <Button variant={props.filter === "complited" ? "contained" : "text"} style={{padding: "2px"}}
+                <Button variant={props.filter === "completed" ? "contained" : "text"} style={{padding: "2px"}}
                         onClick={onButtonFilterClick3}>complited
                 </Button>
             </div>
