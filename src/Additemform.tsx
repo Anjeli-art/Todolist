@@ -24,7 +24,6 @@ export const Additemform = (props: AdditemformPropsType) => {
 
     const addTask = () => {
         if (title.trim() !== "") {
-            debugger
             props.callback(title.trim())
             setTitle("")
         } else {

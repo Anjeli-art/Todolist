@@ -11,6 +11,7 @@ export type ActionTypeRemoveTodolist={
 export type ActionTypeAddTodolist={
     type:'ADD-TODOLIST'
     title:string
+    todolistId:string
 }
 export type ActionTypeChangeTitle={
     type:'CHANGE-TODOLIST-TITLE'
@@ -22,9 +23,12 @@ export type ActionTypeChangeFilter={
     id:string
     filter:filterType
 }
+export const todolist1 = v1()
+export const todolist2 = v1()
 
+const initialState:Array<TodolistType>=[]
 
-export const todolistsReducer = (state: Array<TodolistType>, action: ActionType): Array<TodolistType> => {
+export const todolistsReducer = (state: Array<TodolistType>=initialState, action: ActionType): Array<TodolistType> => {
 
     switch (action.type) {
         case 'REMOVE-TODOLIST': {
@@ -32,7 +36,7 @@ export const todolistsReducer = (state: Array<TodolistType>, action: ActionType)
         }
 
         case 'ADD-TODOLIST': {
-            return [ ...state,{id: v1(), title: action.title, filter: "all"}]
+            return [ {id:action.todolistId, title: action.title, filter: "all"},...state]
         }
 
         case 'CHANGE-TODOLIST-TITLE': {
@@ -54,7 +58,7 @@ export const todolistsReducer = (state: Array<TodolistType>, action: ActionType)
 
 
         default:
-            throw new Error("I don't understand this type")
+            return state
     }
 };
 
@@ -66,7 +70,8 @@ return{
 export const addTodolistAC=(newTodolistTitle:string):ActionTypeAddTodolist=>{
     return{
         type:'ADD-TODOLIST',
-        title:newTodolistTitle
+        title:newTodolistTitle,
+        todolistId:v1()
     }}
 export const changeTitleTodoAC=(todolistId:string,newTodolistTitle:string):ActionTypeChangeTitle=>{
     return {
@@ -74,7 +79,7 @@ export const changeTitleTodoAC=(todolistId:string,newTodolistTitle:string):Actio
         id:todolistId,
         title:newTodolistTitle
     }}
-export const changeFilterTodoAC=(todolistId:string,filter:filterType):ActionTypeChangeFilter=>{
+export const changeFilterTodoAC=(filter:filterType,todolistId:string):ActionTypeChangeFilter=>{
     return {
         type:'CHANGE-TODOLIST-FILTER',
         id:todolistId,
