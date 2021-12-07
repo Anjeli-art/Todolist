@@ -1,26 +1,30 @@
-import {Button, createMuiTheme, Input, TextField} from '@material-ui/core';
+import {Button, TextField} from '@material-ui/core';
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
-
 
 
 export type AdditemformPropsType = {
     callback: (title: string) => void
 }
 
-export const Additemform = (props: AdditemformPropsType) => {
+export const Additemform =React.memo( (props: AdditemformPropsType) => {
+    console.log("ffffffffffff")
 
-    let [title, setTitle] = useState("")
+    const [title, setTitle] = useState("")
+    const [error, setError] = useState<string | null>(null)
+
     const inputHandlerCnange = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
     }
 
     const onEnterHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        setError(null)
+        if(error!==null){
+            setError(null)
+        }
         if (e.charCode === 13) {
             addTask()
         }
     }
-    let [error, setError] = useState<string | null>(null)
+
 
     const addTask = () => {
         if (title.trim() !== "") {
@@ -43,7 +47,7 @@ export const Additemform = (props: AdditemformPropsType) => {
         </div>
 
     );
-};
+});
 
 
 

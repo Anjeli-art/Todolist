@@ -6,7 +6,7 @@ export type EditablespanType = {
     onChange:(Newvalue:string)=>void
 }
 
-export function Editablespan(props: EditablespanType) {
+export const Editablespan=React.memo((props: EditablespanType)=> {
 
     let [editmode, seteditmode] = useState(false)
     let [title, setTitle] = useState("")
@@ -17,9 +17,8 @@ export function Editablespan(props: EditablespanType) {
         setTitle(e.currentTarget.value)
     }
     return (
-        // eslint-disable-next-line react/jsx-no-undef
         editmode ? <Input value={title} onChange={onChangeHandler} onBlur={activaiteViewMode} autoFocus/>
             : <span onDoubleClick={activaiteEditMode}>{props.title}</span>
     )
 
-}
+})

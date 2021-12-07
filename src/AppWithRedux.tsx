@@ -1,4 +1,4 @@
-import React, {useReducer} from 'react';
+import React, {useCallback, useReducer} from 'react';
 import './App.css';
 import {TaskType, Todolist} from "./Todolist";
 import {v1} from "uuid";
@@ -29,20 +29,21 @@ export function AppWithRedux() {
     const todolists = useSelector<AppRootType, Array<TodolistType>>(state => state.todolists)
 
 
-    const removeTodo = (todolistid: string) => {
+    const removeTodo = useCallback((todolistid: string) => {
         dispatch(removeTodolistAC(todolistid))
 
-    }
-    const titleTodoStatus = (todolistid: string, Newvalue: string) => {
+    },[dispatch])
+    const titleTodoStatus =useCallback( (todolistid: string, Newvalue: string) => {
         dispatch(changeTitleTodoAC(todolistid, Newvalue))
-    }
+    },[dispatch])
 
-    const addTodo = (title: string) => {
+    const addTodo = useCallback((title: string) => {
         dispatch(addTodolistAC(title))
-    }
-    const TodoChanged = (value: filterType, todolistid: string) => {
+    }, [dispatch])
+
+    const TodoChanged =useCallback( (value: filterType, todolistid: string) => {
         dispatch(changeFilterTodoAC(value, todolistid))
-    }
+    },[dispatch])
 
     // let changeTaskTitle = (id: string, Newvalue:string, todolistid: string) => { //моя функция
     //     const tasksobj = tasks[todolistid]
@@ -75,9 +76,8 @@ export function AppWithRedux() {
                 </Grid>
                 <Grid container spacing={3}>
                     {todolists.map(el => {
-                        return <Grid item>
+                        return <Grid item key={el.id}>
                             <Todolist title={el.title}
-                                      key={el.id}
                                       todolistid={el.id}
                                       TodoChanged={TodoChanged}
                                       filter={el.filter}

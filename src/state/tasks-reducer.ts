@@ -92,6 +92,7 @@ export const removeTaskAC = (taskid: string, todolistId: string): ActionTypeRemo
     }
 }
 export const addTaskAC = (newTaskTitle: string, todolistId: string): ActionTypeAddTaskAC => {
+    console.log("gggggggggggg")
     return {
         type: 'ADD-TASK',
         title: newTaskTitle,
