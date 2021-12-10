@@ -6,8 +6,7 @@ export type AdditemformPropsType = {
     callback: (title: string) => void
 }
 
-export const Additemform =React.memo( (props: AdditemformPropsType) => {
-    console.log("ffffffffffff")
+export const AddItemForm =React.memo( (props: AdditemformPropsType) => {
 
     const [title, setTitle] = useState("")
     const [error, setError] = useState<string | null>(null)

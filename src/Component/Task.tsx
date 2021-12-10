@@ -1,9 +1,9 @@
 import React, {ChangeEvent, useCallback} from "react";
 import {useDispatch} from "react-redux";
-import {changedTaskStatusAC, changedTaskTitleAC, removeTaskAC} from "./state/tasks-reducer";
+import {changedTaskStatusAC, changedTaskTitleAC, removeTaskAC} from "../Redux/tasks-reducer";
 import {Checkbox, IconButton} from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
-import {Editablespan} from "./Editablespan";
+import {EditableSpan} from "./EditableSpan";
 import {TaskType} from "./Todolist";
 
 type TaskPropsType = {
@@ -36,6 +36,6 @@ export const Task =React.memo((props: TaskPropsType) => {
         <IconButton aria-label="delete" color="default" onClick={deletedTask}>
             <DeleteIcon/>
         </IconButton>
-        <Editablespan title={props.task.title} onChange={onChangeStatusHendler}/>
+        <EditableSpan title={props.task.title} onChange={onChangeStatusHendler}/>
     </li>
 })

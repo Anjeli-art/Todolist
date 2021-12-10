@@ -1,13 +1,13 @@
 import React, { useCallback} from "react";
-import {filterType} from "./App";
-import {Additemform} from "./Additemform";
-import {Editablespan} from "./Editablespan";
+import {filterType} from "../App";
 import {Box, Button, IconButton} from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
-import {addTaskAC} from "./state/tasks-reducer";
+import {addTaskAC} from "../Redux/tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootType} from "./state/store";
+import {AppRootType} from "../Redux/store";
 import {Task} from "./Task";
+import {EditableSpan} from "./EditableSpan";
+import {AddItemForm} from "./AddItemForm";
 
 
 export type TaskType = {
@@ -55,43 +55,22 @@ export const Todolist = React.memo((props: TodolistType) => {
     if (props.filter === "active") {
         taskfortodolist = taskfortodolist.filter(el => !el.isDone)
     }
-    console.log("TODO")
-
     return (
         <Box boxShadow={10}
              style={{padding: "15px", border: "3px #ffca28 solid", borderRadius: "10px", backgroundColor: "white"}}>
             <h3>
-                <Editablespan title={props.title} onChange={onChangeTitleTodo}/>
+                <EditableSpan title={props.title} onChange={onChangeTitleTodo}/>
                 <IconButton aria-label="delete" color="default" onClick={handlerTodoList}>
                     <DeleteIcon/>
                 </IconButton>
             </h3>
-            <Additemform
+            <AddItemForm
                 callback={useCallback((title) => {
                     dispatch(addTaskAC(title, props.todolistid))
                 }, [dispatch, props.todolistid])}/>
             <ul>
                 {taskfortodolist.map(el => {
                         return <Task task={el} todoId={props.todolistid} key={el.id}/>
-                        //  const deletedTask = () => {
-                        //      dispatch(removeTaskAC(el.id, props.todolistid))
-                        //  }
-                        //  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => dispatch(changedTaskStatusAC(el.id, e.currentTarget.checked, props.todolistid))
-                        //  const onChangeStatusHendler = (Newvalue: string) => {
-                        //      dispatch(changedTaskTitleAC(el.id, Newvalue, props.todolistid))
-                        //  }
-                        //
-                        // return <li style={{listStyleType: "none"}} key={el.id} className={el.isDone ? "is-done" : ""}>
-                        //      <Checkbox
-                        //          checked={el.isDone} onChange={onChangeHandler}
-                        //          color="default"
-                        //          inputProps={{'aria-label': 'checkbox with default color'}}
-                        //      />
-                        //      <IconButton aria-label="delete" color="default" onClick={deletedTask}>
-                        //          <DeleteIcon/>
-                        //      </IconButton>
-                        //      <Editablespan title={el.title} onChange={onChangeStatusHendler}/>
-                        //  </li>
                     }
                 )}
             </ul>

@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import './App.css';
-import {TaskType, Todolist} from "./Todolist";
+import {TaskType, Todolist} from "./Component/Todolist";
 import {v1} from "uuid";
-import {Additemform} from "./Additemform";
+import {AddItemForm} from "./Component/AddItemForm";
 import {AppBar, Box, Button, Container, Grid, IconButton, Toolbar, Typography} from "@material-ui/core";
 import MenuIcon from '@material-ui/icons/Menu'
 
@@ -120,7 +120,7 @@ function App() {
             </AppBar>
             <Container style={{marginTop: "20px"}}>
                 <Grid container style={{padding: "20px"}}>
-                    <Additemform callback={addTodo}/>
+                    <AddItemForm callback={addTodo}/>
                 </Grid>
                 <Grid container spacing={3}>
                     {todolist.map(el => {

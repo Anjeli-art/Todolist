@@ -1,8 +1,8 @@
 import React, {useCallback, useReducer} from 'react';
 import './App.css';
-import {TaskType, Todolist} from "./Todolist";
+import {TaskType, Todolist} from "./Component/Todolist";
 import {v1} from "uuid";
-import {Additemform} from "./Additemform";
+import {AddItemForm} from "./Component/AddItemForm";
 import {AppBar, Box, Button, Container, Grid, IconButton, Toolbar, Typography} from "@material-ui/core";
 import MenuIcon from '@material-ui/icons/Menu'
 import {
@@ -11,10 +11,10 @@ import {
     changeTitleTodoAC,
     removeTodolistAC,
     todolistsReducer
-} from "./state/todolist-reducer";
-import {addTaskAC, changedTaskStatusAC, changedTaskTitleAC, removeTaskAC, tasksReducer} from "./state/tasks-reducer";
+} from "./Redux/todolist-reducer";
+import {addTaskAC, changedTaskStatusAC, changedTaskTitleAC, removeTaskAC, tasksReducer} from "./Redux/tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootType} from "./state/store";
+import {AppRootType} from "./Redux/store";
 
 
 export type filterType = "all" | "active" | "completed"
@@ -45,18 +45,6 @@ export function AppWithRedux() {
         dispatch(changeFilterTodoAC(value, todolistid))
     },[dispatch])
 
-    // let changeTaskTitle = (id: string, Newvalue:string, todolistid: string) => { //моя функция
-    //     const tasksobj = tasks[todolistid]
-    //     let newTask = tasksobj.map(el => el.id === id ? {...el,title:Newvalue}: el)
-    //     tasks[todolistid]=newTask
-    //     Settask({...tasks})
-    // }
-
-    // const titleTodoStatus = (todolistid: string, Newvalue: string) => {
-    //     const todo = todolist.map(el => el.id === todolistid ? {...el, title: Newvalue} : el)
-    //     setTodolist(todo)
-    // }
-
     return (
         <Box>
             <AppBar position="static" style={{backgroundColor: "#ffca28", padding: "20px"}}>
@@ -72,7 +60,7 @@ export function AppWithRedux() {
             </AppBar>
             <Container style={{marginTop: "20px"}}>
                 <Grid container style={{padding: "20px"}}>
-                    <Additemform callback={addTodo}/>
+                    <AddItemForm callback={addTodo}/>
                 </Grid>
                 <Grid container spacing={3}>
                     {todolists.map(el => {
