@@ -23,7 +23,7 @@ export type TaskStateType = {
     [key: string]: Array<TaskType>
 }
 
-export function AppWithRedux() {
+export const AppWithRedux: React.FC = () => {
 
     const dispatch = useDispatch()
     const todolists = useSelector<AppRootType, Array<TodolistType>>(state => state.todolists)
@@ -32,18 +32,18 @@ export function AppWithRedux() {
     const removeTodo = useCallback((todolistid: string) => {
         dispatch(removeTodolistAC(todolistid))
 
-    },[dispatch])
-    const titleTodoStatus =useCallback( (todolistid: string, Newvalue: string) => {
+    }, [dispatch])
+    const titleTodoStatus = useCallback((todolistid: string, Newvalue: string) => {
         dispatch(changeTitleTodoAC(todolistid, Newvalue))
-    },[dispatch])
+    }, [dispatch])
 
     const addTodo = useCallback((title: string) => {
         dispatch(addTodolistAC(title))
     }, [dispatch])
 
-    const TodoChanged =useCallback( (value: filterType, todolistid: string) => {
+    const TodoChanged = useCallback((value: filterType, todolistid: string) => {
         dispatch(changeFilterTodoAC(value, todolistid))
-    },[dispatch])
+    }, [dispatch])
 
     return (
         <Box>

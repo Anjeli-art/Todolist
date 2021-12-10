@@ -6,19 +6,19 @@ export type EditablespanType = {
     onChange:(Newvalue:string)=>void
 }
 
-export const EditableSpan=React.memo((props: EditablespanType)=> {
+export const EditableSpan:React.FC< EditablespanType>=React.memo(({title,onChange})=> {
 
     let [editmode, seteditmode] = useState(false)
-    let [title, setTitle] = useState("")
+    let [titleString, setTitleString] = useState("")
 
-    const activaiteEditMode = () => {seteditmode(true);setTitle(props.title)}
-    const activaiteViewMode = () => {seteditmode(false);props.onChange(title)}
+    const activaiteEditMode = () => {seteditmode(true);setTitleString(title)}
+    const activaiteViewMode = () => {seteditmode(false);onChange(titleString)}
     const onChangeHandler = (e:ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.currentTarget.value)
+        setTitleString(e.currentTarget.value)
     }
     return (
-        editmode ? <Input value={title} onChange={onChangeHandler} onBlur={activaiteViewMode} autoFocus/>
-            : <span onDoubleClick={activaiteEditMode}>{props.title}</span>
+        editmode ? <Input value={titleString} onChange={onChangeHandler} onBlur={activaiteViewMode} autoFocus/>
+            : <span onDoubleClick={activaiteEditMode}>{title}</span>
     )
 
 })

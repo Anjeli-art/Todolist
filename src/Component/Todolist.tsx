@@ -26,7 +26,7 @@ type TodolistType = {
 }
 
 
-export const Todolist = React.memo((props: TodolistType) => {
+export const Todolist:React.FC<TodolistType> = React.memo((props) => {
 
     const tasks = useSelector<AppRootType, Array<TaskType>>(state => state.tasks[props.todolistid])
     const dispatch = useDispatch()

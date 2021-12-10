@@ -6,7 +6,7 @@ export type AdditemformPropsType = {
     callback: (title: string) => void
 }
 
-export const AddItemForm =React.memo( (props: AdditemformPropsType) => {
+export const AddItemForm:React.FC<AdditemformPropsType> =React.memo( ({callback}) => {
 
     const [title, setTitle] = useState("")
     const [error, setError] = useState<string | null>(null)
@@ -27,7 +27,7 @@ export const AddItemForm =React.memo( (props: AdditemformPropsType) => {
 
     const addTask = () => {
         if (title.trim() !== "") {
-            props.callback(title.trim())
+            callback(title.trim())
             setTitle("")
         } else {
             setError("title is required")
