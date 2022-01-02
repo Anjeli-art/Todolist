@@ -1,6 +1,7 @@
 import React from "react"
 import {Task} from "./Task";
 import {ReduxStoreProviderDecorator} from "../../.storybook/ReduxStoreProviderDecorator";
+import {PriorytiesTask, TasksStatuses} from "../API/todolistAPI";
 
 
 export default {
@@ -12,7 +13,29 @@ export default {
 
 export const TaskBaseExample = (props: any) => {
     return <>
-        <Task task={{id: "1", isDone: true, title: "css"}} todoId={"todolist1"}/>
-        <Task task={{id: "2", isDone: false, title: "js"}} todoId={"todolist2"}/>
+        <Task task={{
+            description:"",
+            title: "",
+            status: TasksStatuses.Completed,
+            priority: PriorytiesTask.Low,
+            startDate: "",
+            deadline: "",
+            id: "1",
+            todoListId: "",
+            order: 0,
+            addedDate: ''
+        }} todoId={"todolist1"}/>
+        <Task task={{
+            description:"",
+            title: "",
+            status: TasksStatuses.Draft,
+            priority: PriorytiesTask.Middle,
+            startDate: "",
+            deadline: "",
+            id: "1",
+            todoListId: "",
+            order: 0,
+            addedDate: ''
+        }} todoId={"todolist2"}/>
     </>
 }

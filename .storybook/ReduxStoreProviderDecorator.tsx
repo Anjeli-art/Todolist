@@ -1,10 +1,11 @@
-import React     from "react"
+import React  from "react"
 import {Provider} from "react-redux";
 import {AppRootType, store} from "../src/Redux/store";
 import {todolistsReducer} from "../src/Redux/todolist-reducer";
 import {tasksReducer} from "../src/Redux/tasks-reducer";
 import {v1} from "uuid";
 import {combineReducers, createStore} from "redux";
+import {PriorytiesTask, TasksStatuses} from "../src/API/todolistAPI";
 
 const rootReducer = combineReducers({
     todolists: todolistsReducer,
@@ -14,18 +15,37 @@ const rootReducer = combineReducers({
 
 let initialGlobalState = {
     todolists: [
-        {id: "todolist1", title: "what to learn", filter: "all"}, {
-            id: "todolist2", title: "what to bye", filter: "active"
-        }],
+        {id: "todolist1", title: "title", filter: "all", addedDate: '', order: 0},
+        {id: "todolist2", title: "title", filter: "all", addedDate: '', order: 0}
+        ],
 
     tasks: {
         ["todolist1"]:
-            [{id: v1(), title: "html", isDone: true},
-                {id: v1(), title: "css", isDone: true},
-                {id: v1(), title: "js", isDone: false},],
+            [{
+                description: "",
+                title: "1",
+                status: TasksStatuses.New,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: v1(),
+                todoListId:"todolist1" ,
+                order: 0,
+                addedDate: ""
+            }],
         ["todolist2"]:
-            [{id: v1(), title: "book", isDone: true},
-                {id: v1(), title: "milk", isDone: true},]
+            [{
+                description: "",
+                title: "2",
+                status: TasksStatuses.New,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: v1(),
+                todoListId:"todolist2" ,
+                order: 0,
+                addedDate: ""
+            }]
     }
 
 }

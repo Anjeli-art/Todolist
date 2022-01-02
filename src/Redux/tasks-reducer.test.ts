@@ -1,22 +1,113 @@
-import {TaskStateType} from "../App";
-import {addTaskAC, changedTaskStatusAC, changedTaskTitleAC, removeTaskAC, tasksReducer} from "./tasks-reducer";
+
+import {
+    addTaskAC,
+    changedTaskStatusAC,
+    changedTaskTitleAC,
+    removeTaskAC,
+    tasksReducer,
+    TaskStateType
+} from "./tasks-reducer";
 import {addTodolistAC, removeTodolistAC} from "./todolist-reducer";
+import {PriorytiesTask, TasksStatuses} from "../API/todolistAPI";
+
 
 
 test("correct task should be deleted from correct array", () => {
 
     const startState: TaskStateType = {
         "todolist1":
-            [{id: "1", title: "html", isDone: true},
-                {id: "2", title: "css", isDone: true},
-                {id: "3", title: "js", isDone: false},
-                {id: "4", title: "restAPI", isDone: true},
-                {id: "5", title: "graphQL", isDone: false}],
+            [{
+                description: "",
+                title: "html",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "1",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "css",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "2",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "js",
+                status: TasksStatuses.New,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "3",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "restAPI",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "4",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "graphQL",
+                status: TasksStatuses.New,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "5",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            }],
 
         "todolist2":
-            [{id: "1", title: "book", isDone: true},
-                {id: "2", title: "milk", isDone: true},
-                {id: "3", title: "milk", isDone: true},]
+            [{
+                description: "",
+                title: "html",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "1",
+                todoListId:"todolist2",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "css",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "2",
+                todoListId:"todolist2",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "js",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "3",
+                todoListId:"todolist2",
+                order: 0,
+                addedDate: ""
+            }]
     }
     const action = removeTaskAC("2", "todolist2")
     const endState = tasksReducer(startState, action)
@@ -30,16 +121,98 @@ test("correct task should be added from correct array", () => {
 
     const startState: TaskStateType = {
         "todolist1":
-            [{id: "1", title: "html", isDone: true},
-                {id: "2", title: "css", isDone: true},
-                {id: "3", title: "js", isDone: false},
-                {id: "4", title: "restAPI", isDone: true},
-                {id: "5", title: "graphQL", isDone: false}],
+            [{
+                description: "",
+                title: "html",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "1",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "css",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "2",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "js",
+                status: TasksStatuses.New,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "3",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "restAPI",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "4",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "graphQL",
+                status: TasksStatuses.New,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "5",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            }],
 
         "todolist2":
-            [{id: "1", title: "book", isDone: true},
-                {id: "2", title: "milk", isDone: true},
-                {id: "3", title: "milk", isDone: true},]
+            [{
+                description: "",
+                title: "html",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "1",
+                todoListId:"todolist2",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "css",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "2",
+                todoListId:"todolist2",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "js",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "3",
+                todoListId:"todolist2",
+                order: 0,
+                addedDate: ""
+            }]
     }
     const action = addTaskAC("juice", "todolist2")
     const endState = tasksReducer(startState, action)
@@ -48,29 +221,111 @@ test("correct task should be added from correct array", () => {
     expect(endState["todolist2"].length).toBe(4)
     expect(endState["todolist2"][0].id).toBeDefined()
     expect(endState["todolist2"][0].title).toBe("juice")
-    expect(endState["todolist2"][0].isDone).toBe(false)
+    expect(endState["todolist2"][0].status).toBe(TasksStatuses.New)
 })
 
 test("status of specified task should be changed", () => {
 
     const startState: TaskStateType = {
         "todolist1":
-            [{id: "1", title: "html", isDone: true},
-                {id: "2", title: "css", isDone: true},
-                {id: "3", title: "js", isDone: false},
-                {id: "4", title: "restAPI", isDone: true},
-                {id: "5", title: "graphQL", isDone: false}],
+            [{
+                description: "",
+                title: "html",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "1",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "css",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "2",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "js",
+                status: TasksStatuses.New,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "3",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "restAPI",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "4",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "graphQL",
+                status: TasksStatuses.New,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "5",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            }],
 
         "todolist2":
-            [{id: "1", title: "book", isDone: true},
-                {id: "2", title: "milk", isDone: true},
-                {id: "3", title: "milk", isDone: true},]
+            [{
+                description: "",
+                title: "html",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "1",
+                todoListId:"todolist2",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "css",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "2",
+                todoListId:"todolist2",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "js",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "3",
+                todoListId:"todolist2",
+                order: 0,
+                addedDate: ""
+            }]
     }
-    const action = changedTaskStatusAC("2", false, "todolist2")
+    const action = changedTaskStatusAC("2",TasksStatuses.New , "todolist2")
     const endState = tasksReducer(startState, action)
 
-    expect(endState["todolist1"][1].isDone).toBeTruthy()
-    expect(endState["todolist2"][1].isDone).toBeFalsy()
+    expect(endState["todolist1"][1].status).toBeTruthy()
+    expect(endState["todolist2"][1].status).toBeFalsy()
 
 })
 
@@ -78,16 +333,98 @@ test("title of specified task should be changed", () => {
 
     const startState: TaskStateType = {
         "todolist1":
-            [{id: "1", title: "html", isDone: true},
-                {id: "2", title: "css", isDone: true},
-                {id: "3", title: "js", isDone: false},
-                {id: "4", title: "restAPI", isDone: true},
-                {id: "5", title: "graphQL", isDone: false}],
+            [{
+                description: "",
+                title: "html",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "1",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "css",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "2",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "js",
+                status: TasksStatuses.New,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "3",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "restAPI",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "4",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "graphQL",
+                status: TasksStatuses.New,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "5",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            }],
 
         "todolist2":
-            [{id: "1", title: "book", isDone: true},
-                {id: "2", title: "milk", isDone: true},
-                {id: "3", title: "milk", isDone: true},]
+            [{
+                description: "",
+                title: "html",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "1",
+                todoListId:"todolist2",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "css",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "2",
+                todoListId:"todolist2",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "js",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "3",
+                todoListId:"todolist2",
+                order: 0,
+                addedDate: ""
+            }]
     }
     const action = changedTaskTitleAC("2", "titleAC", "todolist2")
     const endState = tasksReducer(startState, action)
@@ -101,16 +438,98 @@ test("new property with new array should be added when new todolist is added", (
 
     const startState: TaskStateType = {
         "todolist1":
-            [{id: "1", title: "html", isDone: true},
-                {id: "2", title: "css", isDone: true},
-                {id: "3", title: "js", isDone: false},
-                {id: "4", title: "restAPI", isDone: true},
-                {id: "5", title: "graphQL", isDone: false}],
+            [{
+                description: "",
+                title: "html",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "1",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "css",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "2",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "js",
+                status: TasksStatuses.New,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "3",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "restAPI",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "4",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "graphQL",
+                status: TasksStatuses.New,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "5",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            }],
 
         "todolist2":
-            [{id: "1", title: "book", isDone: true},
-                {id: "2", title: "milk", isDone: true},
-                {id: "3", title: "milk", isDone: true},]
+            [{
+                description: "",
+                title: "html",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "1",
+                todoListId:"todolist2",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "css",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "2",
+                todoListId:"todolist2",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "js",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "3",
+                todoListId:"todolist2",
+                order: 0,
+                addedDate: ""
+            }]
     }
     const action = addTodolistAC("new todo")
     const endState = tasksReducer(startState, action)
@@ -129,16 +548,98 @@ test("property with todolistid should be deleted", () => {
 
     const startState: TaskStateType = {
         "todolist1":
-            [{id: "1", title: "html", isDone: true},
-                {id: "2", title: "css", isDone: true},
-                {id: "3", title: "js", isDone: false},
-                {id: "4", title: "restAPI", isDone: true},
-                {id: "5", title: "graphQL", isDone: false}],
+            [{
+                description: "",
+                title: "html",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "1",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "css",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "2",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "js",
+                status: TasksStatuses.New,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "3",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "restAPI",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "4",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "graphQL",
+                status: TasksStatuses.New,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "5",
+                todoListId:"todolist1",
+                order: 0,
+                addedDate: ""
+            }],
 
         "todolist2":
-            [{id: "1", title: "book", isDone: true},
-                {id: "2", title: "milk", isDone: true},
-                {id: "3", title: "milk", isDone: true},]
+            [{
+                description: "",
+                title: "html",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "1",
+                todoListId:"todolist2",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "css",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "2",
+                todoListId:"todolist2",
+                order: 0,
+                addedDate: ""
+            },{
+                description: "",
+                title: "js",
+                status: TasksStatuses.Completed,
+                priority: PriorytiesTask.Low,
+                startDate: "",
+                deadline: "",
+                id: "3",
+                todoListId:"todolist2",
+                order: 0,
+                addedDate: ""
+            }]
     }
     const action = removeTodolistAC( "todolist2")
     const endState = tasksReducer(startState, action)

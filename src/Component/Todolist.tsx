@@ -1,5 +1,4 @@
 import React, { useCallback} from "react";
-import {filterType} from "../App";
 import {Box, Button, IconButton} from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import {addTaskAC} from "../Redux/tasks-reducer";
@@ -8,13 +7,10 @@ import {AppRootType} from "../Redux/store";
 import {Task} from "./Task";
 import {EditableSpan} from "./EditableSpan";
 import {AddItemForm} from "./AddItemForm";
+import {TasksStatuses, TasksType} from "../API/todolistAPI";
+import {filterType} from "../Redux/todolist-reducer";
 
 
-export type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-}
 
 type TodolistType = {
     title: string
@@ -28,7 +24,7 @@ type TodolistType = {
 
 export const Todolist:React.FC<TodolistType> = React.memo((props) => {
 
-    const tasks = useSelector<AppRootType, Array<TaskType>>(state => state.tasks[props.todolistid])
+    const tasks = useSelector<AppRootType, Array<TasksType>>(state => state.tasks[props.todolistid])
     const dispatch = useDispatch()
 
     const onButtonFilterClick1 = useCallback(() => {
@@ -50,10 +46,10 @@ export const Todolist:React.FC<TodolistType> = React.memo((props) => {
     let taskfortodolist = tasks
 
     if (props.filter === "completed") {
-        taskfortodolist = taskfortodolist.filter(el => el.isDone)
+        taskfortodolist = taskfortodolist.filter(el => el.status===TasksStatuses.Completed)
     }
     if (props.filter === "active") {
-        taskfortodolist = taskfortodolist.filter(el => !el.isDone)
+        taskfortodolist = taskfortodolist.filter(el => el.status===TasksStatuses.New)
     }
     return (
         <Box boxShadow={10}
