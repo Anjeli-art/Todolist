@@ -1,6 +1,9 @@
 import React, {ChangeEvent, useCallback} from "react";
 import {useDispatch} from "react-redux";
-import {changedTaskStatusAC, changedTaskTitleAC, removeTaskAC} from "../Redux/tasks-reducer";
+import {
+    changedTaskTitleAC,
+    deleteTasksTC, updateTasksStatusTC,
+} from "../Redux/tasks-reducer";
 import {Checkbox, IconButton} from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import {EditableSpan} from "./EditableSpan";
@@ -17,11 +20,11 @@ export const Task: React.FC<TaskPropsType> = React.memo(({task, todoId}) => {
     const dispatch = useDispatch()
 
     const deletedTask = useCallback(() => {
-        dispatch(removeTaskAC(task.id, todoId))
-    }, [dispatch, task.id, todoId])
+        dispatch(deleteTasksTC( todoId,task.id,))
+    }, [dispatch, todoId,task.id])
 
     const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        dispatch(changedTaskStatusAC(task.id, e.currentTarget.checked ? TasksStatuses.Completed:TasksStatuses.New, todoId))
+        dispatch(updateTasksStatusTC(task.id,todoId, e.currentTarget.checked ? TasksStatuses.Completed:TasksStatuses.New))
     }, [dispatch, task.id, todoId])
 
     const onChangeStatusHendler = useCallback((Newvalue: string) => {

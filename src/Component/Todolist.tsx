@@ -1,7 +1,7 @@
-import React, { useCallback} from "react";
+import React, {useCallback, useEffect} from "react";
 import {Box, Button, IconButton} from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
-import {addTaskAC} from "../Redux/tasks-reducer";
+import {addTaskAC, addTasksTC, setTasksTC} from "../Redux/tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootType} from "../Redux/store";
 import {Task} from "./Task";
@@ -9,7 +9,6 @@ import {EditableSpan} from "./EditableSpan";
 import {AddItemForm} from "./AddItemForm";
 import {TasksStatuses, TasksType} from "../API/todolistAPI";
 import {filterType} from "../Redux/todolist-reducer";
-
 
 
 type TodolistType = {
@@ -22,7 +21,11 @@ type TodolistType = {
 }
 
 
-export const Todolist:React.FC<TodolistType> = React.memo((props) => {
+export const Todolist: React.FC<TodolistType> = React.memo((props) => {
+
+    useEffect(() => {
+        dispatch(setTasksTC(props.todolistid))
+    }, [])
 
     const tasks = useSelector<AppRootType, Array<TasksType>>(state => state.tasks[props.todolistid])
     const dispatch = useDispatch()
@@ -46,11 +49,12 @@ export const Todolist:React.FC<TodolistType> = React.memo((props) => {
     let taskfortodolist = tasks
 
     if (props.filter === "completed") {
-        taskfortodolist = taskfortodolist.filter(el => el.status===TasksStatuses.Completed)
+        taskfortodolist = taskfortodolist.filter(el => el.status === TasksStatuses.Completed)
     }
     if (props.filter === "active") {
-        taskfortodolist = taskfortodolist.filter(el => el.status===TasksStatuses.New)
+        taskfortodolist = taskfortodolist.filter(el => el.status === TasksStatuses.New)
     }
+
     return (
         <Box boxShadow={10}
              style={{padding: "15px", border: "3px #ffca28 solid", borderRadius: "10px", backgroundColor: "white"}}>
@@ -62,7 +66,7 @@ export const Todolist:React.FC<TodolistType> = React.memo((props) => {
             </h3>
             <AddItemForm
                 callback={useCallback((title) => {
-                    dispatch(addTaskAC(title, props.todolistid))
+                    dispatch(addTasksTC(title, props.todolistid))
                 }, [dispatch, props.todolistid])}/>
             <ul>
                 {taskfortodolist.map(el => {

@@ -60,10 +60,9 @@ type GetTasksResponse = {
     error: string | null
 
 }
-type UpdateTask = {
+export type UpdateTask = {
     title: string
     description: string
-    completed: boolean
     status: TasksStatuses
     priority: PriorytiesTask
     startDate: string
@@ -97,7 +96,7 @@ export const taskApi = {
         return instance.get<GetTasksResponse>(`/todo-lists/${todolistId}/tasks`)
     },
     createTask(title: string, todolistId: string) {
-        return instance.post<CommonResponseType<TasksType>>(`/todo-lists/${todolistId}/tasks`, {title})
+        return instance.post<CommonResponseType<{item:TasksType}>>(`/todo-lists/${todolistId}/tasks`, {title})
     }
     ,
     deleteTask(todolistId: string, taskid: string) {
@@ -105,6 +104,6 @@ export const taskApi = {
     }
     ,
     updateTask( model:UpdateTask, todolistId: string, taskid: string ) {
-        return instance.put<CommonResponseType>(`/todo-lists/${todolistId}/tasks/${taskid}`, model)
+        return instance.put<CommonResponseType<{item:TasksType}>>(`/todo-lists/${todolistId}/tasks/${taskid}`, model)
     }
 }

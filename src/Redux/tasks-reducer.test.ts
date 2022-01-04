@@ -214,14 +214,25 @@ test("correct task should be added from correct array", () => {
                 addedDate: ""
             }]
     }
-    const action = addTaskAC("juice", "todolist2")
+    const action = addTaskAC({
+        description: "",
+        title: "juice",
+        status: TasksStatuses.New,
+        priority: PriorytiesTask.Low,
+        startDate: "",
+        deadline: "",
+        id: "1",
+        todoListId:"todolist1",
+        order: 0,
+        addedDate: ""
+    })
     const endState = tasksReducer(startState, action)
 
-    expect(endState["todolist1"].length).toBe(5)
-    expect(endState["todolist2"].length).toBe(4)
-    expect(endState["todolist2"][0].id).toBeDefined()
-    expect(endState["todolist2"][0].title).toBe("juice")
-    expect(endState["todolist2"][0].status).toBe(TasksStatuses.New)
+    expect(endState["todolist1"].length).toBe(6)
+    expect(endState["todolist2"].length).toBe(3)
+    expect(endState["todolist1"][0].id).toBeDefined()
+    expect(endState["todolist1"][0].title).toBe("juice")
+    expect(endState["todolist1"][0].status).toBe(TasksStatuses.New)
 })
 
 test("status of specified task should be changed", () => {
@@ -531,7 +542,8 @@ test("new property with new array should be added when new todolist is added", (
                 addedDate: ""
             }]
     }
-    const action = addTodolistAC("new todo")
+    let newTodolist = {id: "todolist3", title: "what to learn", filter: "all",addedDate:"", order:0}
+    const action = addTodolistAC(newTodolist)
     const endState = tasksReducer(startState, action)
 
     const keys = Object.keys(endState)
