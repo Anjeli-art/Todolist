@@ -1,17 +1,17 @@
 import React, {useCallback, useEffect} from "react";
 import {Box, Button, IconButton} from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
-import {addTaskAC, addTasksTC, setTasksTC} from "../Redux/tasks-reducer";
+import {addTasksTC, setTasksTC} from "../tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootType} from "../Redux/store";
-import {Task} from "./Task";
-import {EditableSpan} from "./EditableSpan";
-import {AddItemForm} from "./AddItemForm";
-import {TasksStatuses, TasksType} from "../API/todolistAPI";
-import {filterType} from "../Redux/todolist-reducer";
+import {AppRootType} from "../../../app/store";
+import {Task} from "./Task/Task";
+import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
+import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
+import {TasksStatuses, TasksType} from "../../../API/todolistAPI";
+import {filterType} from "../todolist-reducer";
 
 
-type TodolistType = {
+export type TodolistType = {
     title: string
     TodoChanged: (value: filterType, todolistid: string) => void
     filter: filterType

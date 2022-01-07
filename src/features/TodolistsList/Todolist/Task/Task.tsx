@@ -1,13 +1,12 @@
 import React, {ChangeEvent, useCallback} from "react";
 import {useDispatch} from "react-redux";
 import {
-    changedTaskTitleAC,
-    deleteTasksTC, updateTasksStatusTC,
-} from "../Redux/tasks-reducer";
+    deleteTasksTC, updateTasksTC
+} from "../../tasks-reducer";
 import {Checkbox, IconButton} from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
-import {EditableSpan} from "./EditableSpan";
-import {TasksStatuses, TasksType} from "../API/todolistAPI";
+import {EditableSpan} from "../../../../components/EditableSpan/EditableSpan";
+import {TasksStatuses, TasksType} from "../../../../API/todolistAPI";
 
 
 type TaskPropsType = {
@@ -24,11 +23,11 @@ export const Task: React.FC<TaskPropsType> = React.memo(({task, todoId}) => {
     }, [dispatch, todoId,task.id])
 
     const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        dispatch(updateTasksStatusTC(task.id,todoId, e.currentTarget.checked ? TasksStatuses.Completed:TasksStatuses.New))
+        dispatch(updateTasksTC(task.id,todoId, {status:e.currentTarget.checked ? TasksStatuses.Completed:TasksStatuses.New}))
     }, [dispatch, task.id, todoId])
 
     const onChangeStatusHendler = useCallback((Newvalue: string) => {
-        dispatch(changedTaskTitleAC(task.id, Newvalue, todoId))
+        dispatch(updateTasksTC(task.id,todoId, {title:Newvalue}))
     }, [dispatch, task.id, todoId])
 
     return <li style={{listStyleType: "none"}} className={task.status=== TasksStatuses.Completed? "is-done" : ""}>
