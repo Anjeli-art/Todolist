@@ -4,9 +4,10 @@ import {Input} from "@material-ui/core";
 export type EditablespanType = {
     title: string
     onChange:(Newvalue:string)=>void
+    disabled?:boolean
 }
 
-export const EditableSpan:React.FC< EditablespanType>=React.memo(({title,onChange})=> {
+export const EditableSpan:React.FC< EditablespanType>=React.memo(({title,onChange,disabled})=> {
 
     let [editmode, seteditmode] = useState(false)
     let [titleString, setTitleString] = useState("")
@@ -17,8 +18,8 @@ export const EditableSpan:React.FC< EditablespanType>=React.memo(({title,onChang
         setTitleString(e.currentTarget.value)
     }
     return (
-        editmode ? <Input value={titleString} onChange={onChangeHandler} onBlur={activaiteViewMode} autoFocus/>
-            : <span onDoubleClick={activaiteEditMode}>{title}</span>
+        editmode ? <Input value={titleString} onChange={onChangeHandler} disabled={disabled} onBlur={activaiteViewMode} autoFocus/>
+            : <span onDoubleClick={activaiteEditMode} >{title}</span>
     )
 
 })

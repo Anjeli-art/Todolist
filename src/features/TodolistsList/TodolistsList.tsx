@@ -13,8 +13,15 @@ import {Grid} from "@material-ui/core";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {Todolist} from "./Todolist/Todolist";
 
-export const TodolistsList = () => {
+type PropsType = {
+    demo?: boolean
+}
+
+export const TodolistsList: React.FC<PropsType> = React.memo(({demo = false}) => {
     useEffect(() => {
+        if (demo) {
+            return
+        }
         dispatch(setTodoTС())
     }, [])
 
@@ -46,15 +53,14 @@ export const TodolistsList = () => {
             <Grid container spacing={3}>
                 {todolists.map(el => {
                     return <Grid item key={el.id}>
-                        <Todolist title={el.title}
-                                  todolistid={el.id}
+                        <Todolist todo={el}
                                   TodoChanged={TodoChanged}
-                                  filter={el.filter}
                                   removeTodo={removeTodo}
                                   titleTodoStatus={titleTodoStatus}
+                                  demo={demo}
                         />
                     </Grid>
                 })}</Grid>
         </>
     );
-};
+});

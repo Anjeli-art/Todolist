@@ -13,3 +13,7 @@ const callback=action("value changed")
 export const EditableSpanBaseExample = (props: any) => {
     return <EditableSpan title={"title"} onChange={callback}/>
 }
+
+export const EditableSpanDisabledExample = (props: any) => {
+    return <EditableSpan title={"title"} onChange={callback} disabled={true}/>
+}

@@ -1,21 +1,24 @@
 import {v1} from 'uuid';
 import {
-    addTodolistAC, changeFilterTodoAC,
-    changeTitleTodoAC, filterType,
+    addTodolistAC, changeEntityStatusTodoAC, changeFilterTodoAC,
+    changeTitleTodoAC, EntityStatusType, filterType,
     removeTodolistAC, setTodosAC,
     todolistsReducer, TodolistsTypeEntity
 } from "./todolist-reducer";
 
+let startState:Array<TodolistsTypeEntity>
+let todolistId1 = v1();
+let todolistId2 = v1();
 
+beforeEach(()=>{
+    startState=[
+        {id: todolistId1, title: "What to learn", filter: "all",addedDate: '',entityStatus:"idle", order: 0},
+        {id: todolistId2, title: "What to buy", filter: "all",addedDate: '',entityStatus:"idle", order: 0}
+    ]
+
+})
 
 test('correct todolist should be removed', () => {
-    let todolistId1 = v1();
-    let todolistId2 = v1();
-
-    const startState: Array<TodolistsTypeEntity> = [
-        {id: todolistId1, title: "What to learn", filter: "all",addedDate: '', order: 0},
-        {id: todolistId2, title: "What to buy", filter: "all",addedDate: '', order: 0}
-    ]
 
     const endState = todolistsReducer(startState, removeTodolistAC(todolistId1))
 
@@ -23,16 +26,8 @@ test('correct todolist should be removed', () => {
     expect(endState[0].id).toBe(todolistId2);
 })
 test('correct todolist should be added', () => {
-    let todolistId1 = v1();
-    let todolistId2 = v1();
 
     let newTodolist = {id: "todolist1", title: "what to learn", filter: "all",addedDate:"", order:0}
-
-
-    const startState: Array<TodolistsTypeEntity> = [
-        {id: todolistId1, title: "What to learn", filter: "all",addedDate: '', order: 0},
-        {id: todolistId2, title: "What to buy", filter: "all",addedDate: '', order: 0}
-    ]
 
     const endState = todolistsReducer(startState, addTodolistAC(newTodolist))
 
@@ -43,16 +38,9 @@ test('correct todolist should be added', () => {
 });
 
 test('correct todolist should change its name', () => {
-    let todolistId1 = v1();
-    let todolistId2 = v1();
+
 
     let newTodolistTitle = "New Todolist";
-
-    const startState: Array<TodolistsTypeEntity> = [
-        {id: todolistId1, title: "What to learn", filter: "all",addedDate: '', order: 0},
-        {id: todolistId2, title: "What to buy", filter: "all",addedDate: '', order: 0}
-    ]
-
     const action = changeTitleTodoAC(todolistId2,newTodolistTitle)
 
     const endState = todolistsReducer(startState, action);
@@ -62,15 +50,8 @@ test('correct todolist should change its name', () => {
 });
 
 test('correct filter of todolist should be changed', () => {
-    let todolistId1 = v1();
-    let todolistId2 = v1();
 
     let newFilter: filterType = "completed";
-
-    const startState: Array<TodolistsTypeEntity> = [
-        {id: todolistId1, title: "What to learn", filter: "all",addedDate: '', order: 0},
-        {id: todolistId2, title: "What to buy", filter: "all",addedDate: '', order: 0}
-    ]
 
     const action=changeFilterTodoAC(newFilter,todolistId2)
 
@@ -80,14 +61,20 @@ test('correct filter of todolist should be changed', () => {
     expect(endState[1].filter).toBe(newFilter);
 });
 
-test('todolist should be set to the state', () => {
-    let todolistId1 = v1();
-    let todolistId2 = v1();
+test('correct entity status of todolist should be changed', () => {
 
-    const startState: Array<TodolistsTypeEntity> = [
-        {id: todolistId1, title: "What to learn", filter: "all",addedDate: '', order: 0},
-        {id: todolistId2, title: "What to buy", filter: "all",addedDate: '', order: 0}
-    ]
+    let newStatus: EntityStatusType = "loading";
+
+    const action=changeEntityStatusTodoAC(newStatus,todolistId2)
+
+    const endState = todolistsReducer(startState, action);
+
+    expect(endState[1].entityStatus).toBe("loading");
+    expect(endState[0].entityStatus).toBe("idle");
+    expect(endState!==startState).toBeTruthy()
+});
+
+test('todolist should be set to the state', () => {
 
     const action=setTodosAC(startState)
 

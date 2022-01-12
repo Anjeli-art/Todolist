@@ -1,6 +1,8 @@
 import {PriorytiesTask, taskApi, TasksStatuses, TasksType, UpdateTask} from "../../API/todolistAPI";
 import {AppRootType, AppThunk} from "../../app/store";
-import {TypeForTasksAction} from "./todolist-reducer";
+import {ServerResponseResultCode, TypeForTasksAction} from "./todolist-reducer";
+import {setAppErrorAC, setAppStatusAC} from "../../app/app-reducer";
+import {handleServerNetworkError} from "../../utils/error-utils";
 
 
 export type ActionTypeTasks =
@@ -16,36 +18,37 @@ export type TaskStateType = {
 
 const initialState: TaskStateType = {}
 
+
 export const tasksReducer = (state: TaskStateType = initialState, action: ActionTypeTasks): TaskStateType => {
 
     switch (action.type) {
-        case "SET-TODO":
+        case "TODO/SET-TODO":
             let copyState = {...state}
             action.todos.forEach((t) => {
                 copyState[t.id] = []
             })
             return copyState
-        case 'REMOVE-TASK':
+        case 'TASK/REMOVE-TASK':
             return {...state, [action.todolistId]: state[action.todolistId].filter(t => t.id !== action.id)}
 
-        case 'ADD-TASK':
+        case 'TASK/ADD-TASK':
             return {...state, [action.task.todoListId]: [action.task, ...state[action.task.todoListId]]}
 
-        case 'CHANGE-TASK':
+        case 'TASK/CHANGE-TASK':
             return {
                 ...state,
                 [action.todolistId]: state[action.todolistId].map(t => t.id === action.taskid ? {...t, ...action.model} : t)
             }
 
-        case 'ADD-TODOLIST':
+        case 'TODO/ADD-TODOLIST':
             return {...state, [action.todolist.id]: []}
 
-        case 'REMOVE-TODOLIST': {
+        case 'TODO/REMOVE-TODOLIST': {
             const stateCopy = {...state}
             delete stateCopy[action.id]
             return stateCopy
         }
-        case "SET-TASKS":
+        case "TASK/SET-TASKS":
             return {...state, [action.todolistId]: action.tasks}
 
 
@@ -55,18 +58,18 @@ export const tasksReducer = (state: TaskStateType = initialState, action: Action
 };
 
 export const removeTaskAC = (todolistId: string, id: string) => ({
-    type: 'REMOVE-TASK',
+    type: 'TASK/REMOVE-TASK',
     id,
     todolistId,
 }) as const
 
 export const addTaskAC = (task: TasksType) => ({
-    type: 'ADD-TASK',
+    type: 'TASK/ADD-TASK',
     task
 }) as const
 
 export const changedTaskAC = (taskid: string, model: UpdateTaskForThunk, todolistId: string) => ({
-    type: 'CHANGE-TASK',
+    type: 'TASK/CHANGE-TASK',
     model,
     taskid,
     todolistId,
@@ -74,39 +77,73 @@ export const changedTaskAC = (taskid: string, model: UpdateTaskForThunk, todolis
 
 
 export const setTaskAC = (tasksArray: Array<TasksType>, todolistId: string) => ({
-    type: "SET-TASKS",
+    type: "TASK/SET-TASKS",
     tasks: tasksArray,
     todolistId
 }) as const
 
 
 export const setTasksTC = (todolistId: string): AppThunk => async dispatch => {
+    dispatch(setAppStatusAC("loading"))
     try {
         const res = await taskApi.getTask(todolistId)
         dispatch(setTaskAC(res.data.items, todolistId))
-    } catch (e) {
-        console.log(e)
+    } catch (e: any) {
+        if (e.name === "SyntaxError") {
+            dispatch(setAppErrorAC(e.message))
+        } else if (e.message === 'Network Error') {
+            dispatch(setAppErrorAC("no connection!"))
+        } else {
+            dispatch(setAppErrorAC("something error"))
+        }
+
+    } finally {
+        dispatch(setAppStatusAC("success"))
     }
 
 }
 
 export const deleteTasksTC = (todolistId: string, taskid: string): AppThunk => async dispatch => {
+    dispatch(setAppStatusAC("loading"))
     try {
-        await taskApi.deleteTask(todolistId, taskid)
+        const res = await taskApi.deleteTask(todolistId, taskid)
+        if (res.data.resultCode !== ServerResponseResultCode.success) {
+            throw new SyntaxError(res.data.messages[0])
+        }
         dispatch(removeTaskAC(todolistId, taskid))
-    } catch (e) {
-        console.log(e)
+    } catch (e: any) {
+        if (e.name === "SyntaxError") {
+            dispatch(setAppErrorAC(e.message))
+        } else if (e.message === 'Network Error') {
+            dispatch(setAppErrorAC("no connection!"))
+        } else {
+            dispatch(setAppErrorAC("something error"))
+        }
+    } finally {
+        dispatch(setAppStatusAC("success"))
     }
 
 
 }
 
 export const addTasksTC = (title: string, todolistId: string): AppThunk => async dispatch => {
+    dispatch(setAppStatusAC("loading"))
     try {
         const res = await taskApi.createTask(title, todolistId)
+        if (res.data.resultCode !== ServerResponseResultCode.success) {
+            throw new SyntaxError(res.data.messages[0])
+        }
         dispatch(addTaskAC(res.data.data.item))
-    } catch (e) {
-        console.log(e)
+    } catch (e: any) {
+        if (e.name === "SyntaxError") {
+            dispatch(setAppErrorAC(e.message))
+        } else if (e.message === 'Network Error') {
+            dispatch(setAppErrorAC("no connection!"))
+        } else {
+            dispatch(setAppErrorAC("something error"))
+        }
+    } finally {
+        dispatch(setAppStatusAC("success"))
     }
 
 
@@ -121,30 +158,42 @@ export type UpdateTaskForThunk = {
     deadline?: string
 }
 export const updateTasksTC = (taskId: string, todolistId: string, model: UpdateTaskForThunk): AppThunk =>
-        async (dispatch
-               , getState: () => AppRootType) => {
-    const tasks = getState().tasks[todolistId]
-    const currentTask = tasks.find(t => {
-        return t.id === taskId
-    })
-    if (currentTask) {
-        const apiModel: UpdateTask = {
-            title: currentTask.title,
-            status: currentTask.status,
-            description: currentTask.description,
-            priority: currentTask.priority,
-            startDate: currentTask.startDate,
-            deadline: currentTask.deadline,
-            ...model
-        }
-        try {
-            await taskApi.updateTask(apiModel, todolistId, taskId)
-            dispatch(changedTaskAC(taskId, model, todolistId))
+    async (dispatch
+        , getState: () => AppRootType) => {
+        dispatch(setAppStatusAC("loading"))
+        const tasks = getState().tasks[todolistId]
+        const currentTask = tasks.find(t => {
+            return t.id === taskId
+        })
+        if (currentTask) {
+            const apiModel: UpdateTask = {
+                title: currentTask.title,
+                status: currentTask.status,
+                description: currentTask.description,
+                priority: currentTask.priority,
+                startDate: currentTask.startDate,
+                deadline: currentTask.deadline,
+                ...model
+            }
+            try {
+                const res = await taskApi.updateTask(apiModel, todolistId, taskId)
+                if (res.data.resultCode !== ServerResponseResultCode.success) {
+                    throw new SyntaxError(res.data.messages[0])
+                }
+                dispatch(changedTaskAC(taskId, model, todolistId))
 
-        } catch (e) {
-            console.log(e)
-        }
+            } catch (e: any) {
+                if (e.name === "SyntaxError") {
+                    dispatch(setAppErrorAC(e.message))
+                } else if (e.message === 'Network Error') {
+                    dispatch(setAppErrorAC("no connection!"))
+                } else {
+                    dispatch(setAppErrorAC("something error"))
+                }
+            } finally {
+                dispatch(setAppStatusAC("success"))
+            }
 
+        }
     }
-}
 
