@@ -1,4 +1,5 @@
 import axios, {AxiosResponse} from "axios";
+import {ServerResponseResultCode} from "../features/TodolistsList/todolist-reducer";
 
 const instance = axios.create({
     baseURL: "https://social-network.samuraijs.com/api/1.1",
@@ -31,12 +32,12 @@ export enum TasksStatuses {
 
 }
 
-export enum PriorytiesTask{
-    Low=0,
-    Middle=1,
-    Hi=2,
-    Urgently=3,
-    later=4
+export enum PriorytiesTask {
+    Low = 0,
+    Middle = 1,
+    Hi = 2,
+    Urgently = 3,
+    later = 4
 
 }
 
@@ -76,17 +77,29 @@ export const todolistApi = {
     createTodolist(title: string) {
         return instance.post<CommonResponseType<{ item: TodolistsType }>,
             AxiosResponse<CommonResponseType<{ item: TodolistsType }>>,
-            { title: string }>("/todo-lists", {title})
+            { title: string }>("/todo-lists", {title}).then((res) => {
+            if (res.data.resultCode !== ServerResponseResultCode.success) {
+                throw new SyntaxError(res.data.messages[0])
+            } else return res
+        })
     }
     ,
     deleteTodolist(todolistId: string) {
-        return instance.delete<CommonResponseType>(`/todo-lists/${todolistId}`)
+        return instance.delete<CommonResponseType>(`/todo-lists/${todolistId}`).then((res) => {
+            if (res.data.resultCode !== ServerResponseResultCode.success) {
+                throw new SyntaxError(res.data.messages[0])
+            } else return res
+        })
     }
     ,
     updateTodolistTitle(params: { title: string, todolistId: string }) {
         return instance.put<CommonResponseType,
             AxiosResponse<CommonResponseType>,
-            { title: string }>(`/todo-lists/${params.todolistId}`, {title: params.title})
+            { title: string }>(`/todo-lists/${params.todolistId}`, {title: params.title}).then((res) => {
+            if (res.data.resultCode !== ServerResponseResultCode.success) {
+                throw new SyntaxError(res.data.messages[0])
+            } else return res
+        })
     }
 }
 
@@ -95,14 +108,26 @@ export const taskApi = {
         return instance.get<GetTasksResponse>(`/todo-lists/${todolistId}/tasks`)
     },
     createTask(title: string, todolistId: string) {
-        return instance.post<CommonResponseType<{item:TasksType}>>(`/todo-lists/${todolistId}/tasks`, {title})
+        return instance.post<CommonResponseType<{ item: TasksType }>>(`/todo-lists/${todolistId}/tasks`, {title}).then((res) => {
+            if (res.data.resultCode !== ServerResponseResultCode.success) {
+                throw new SyntaxError(res.data.messages[0])
+            } else return res
+        })
     }
     ,
     deleteTask(todolistId: string, taskid: string) {
-        return instance.delete<CommonResponseType>(`/todo-lists/${todolistId}/tasks/${taskid}`)
+        return instance.delete<CommonResponseType>(`/todo-lists/${todolistId}/tasks/${taskid}`).then((res) => {
+            if (res.data.resultCode !== ServerResponseResultCode.success) {
+                throw new SyntaxError(res.data.messages[0])
+            } else return res
+        })
     }
     ,
-    updateTask( model:UpdateTask, todolistId: string, taskid: string ) {
-        return instance.put<CommonResponseType<{item:TasksType}>>(`/todo-lists/${todolistId}/tasks/${taskid}`, model)
+    updateTask(model: UpdateTask, todolistId: string, taskid: string) {
+        return instance.put<CommonResponseType<{ item: TasksType }>>(`/todo-lists/${todolistId}/tasks/${taskid}`, model).then((res) => {
+            if (res.data.resultCode !== ServerResponseResultCode.success) {
+                throw new SyntaxError(res.data.messages[0])
+            } else return res
+        })
     }
 }

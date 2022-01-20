@@ -89,6 +89,7 @@ export const setTasksTC = (todolistId: string): AppThunk => async dispatch => {
         const res = await taskApi.getTask(todolistId)
         dispatch(setTaskAC(res.data.items, todolistId))
     } catch (e: any) {
+        // handleServerNetworkError(e, dispatch)
         if (e.name === "SyntaxError") {
             dispatch(setAppErrorAC(e.message))
         } else if (e.message === 'Network Error') {
@@ -106,12 +107,10 @@ export const setTasksTC = (todolistId: string): AppThunk => async dispatch => {
 export const deleteTasksTC = (todolistId: string, taskid: string): AppThunk => async dispatch => {
     dispatch(setAppStatusAC("loading"))
     try {
-        const res = await taskApi.deleteTask(todolistId, taskid)
-        if (res.data.resultCode !== ServerResponseResultCode.success) {
-            throw new SyntaxError(res.data.messages[0])
-        }
+        await taskApi.deleteTask(todolistId, taskid)
         dispatch(removeTaskAC(todolistId, taskid))
     } catch (e: any) {
+        // handleServerNetworkError(e, dispatch)
         if (e.name === "SyntaxError") {
             dispatch(setAppErrorAC(e.message))
         } else if (e.message === 'Network Error') {
@@ -130,11 +129,9 @@ export const addTasksTC = (title: string, todolistId: string): AppThunk => async
     dispatch(setAppStatusAC("loading"))
     try {
         const res = await taskApi.createTask(title, todolistId)
-        if (res.data.resultCode !== ServerResponseResultCode.success) {
-            throw new SyntaxError(res.data.messages[0])
-        }
         dispatch(addTaskAC(res.data.data.item))
     } catch (e: any) {
+        // handleServerNetworkError(e, dispatch)
         if (e.name === "SyntaxError") {
             dispatch(setAppErrorAC(e.message))
         } else if (e.message === 'Network Error') {
@@ -176,13 +173,11 @@ export const updateTasksTC = (taskId: string, todolistId: string, model: UpdateT
                 ...model
             }
             try {
-                const res = await taskApi.updateTask(apiModel, todolistId, taskId)
-                if (res.data.resultCode !== ServerResponseResultCode.success) {
-                    throw new SyntaxError(res.data.messages[0])
-                }
+                await taskApi.updateTask(apiModel, todolistId, taskId)
                 dispatch(changedTaskAC(taskId, model, todolistId))
 
             } catch (e: any) {
+                // handleServerNetworkError(e, dispatch)
                 if (e.name === "SyntaxError") {
                     dispatch(setAppErrorAC(e.message))
                 } else if (e.message === 'Network Error') {

@@ -1,6 +1,7 @@
 import {todolistApi, TodolistsType} from "../../API/todolistAPI";
 import {AppThunk} from "../../app/store";
 import {setAppErrorAC, setAppStatusAC} from "../../app/app-reducer";
+import {handleServerNetworkError} from "../../utils/error-utils";
 
 export type TypeForTasksAction =
     ReturnType<typeof removeTodolistAC>
@@ -16,7 +17,7 @@ export type ActionTypeTodolists =
 
 export type filterType = "all" | "active" | "completed"
 export type EntityStatusType = "idle" | "sucsses" | "loading" | "failed"
-export type TodolistsTypeEntity = TodolistsType & { filter: filterType ,entityStatus:EntityStatusType}
+export type TodolistsTypeEntity = TodolistsType & { filter: filterType, entityStatus: EntityStatusType }
 
 const initialState: Array<TodolistsTypeEntity> = []
 
@@ -27,7 +28,7 @@ export const todolistsReducer = (state: Array<TodolistsTypeEntity> = initialStat
             return state.filter(todo => todo.id !== action.id)
 
         case 'TODO/ADD-TODOLIST':
-            return [{...action.todolist, filter: "all",entityStatus:"idle"}, ...state]
+            return [{...action.todolist, filter: "all", entityStatus: "idle"}, ...state]
 
         case 'TODO/CHANGE-TODOLIST-TITLE':
             return state.map(todo => todo.id === action.id ? {...todo, title: action.title} : todo)
@@ -36,11 +37,11 @@ export const todolistsReducer = (state: Array<TodolistsTypeEntity> = initialStat
             return state.map(todo => todo.id === action.id ? {...todo, filter: action.filter} : todo)
 
         case'TODO/CHANGE-TODOLIST-ENTITY-STATUS':
-            return state.map(todo => todo.id === action.id ? {...todo,entityStatus:action.entityStatus } : todo)
+            return state.map(todo => todo.id === action.id ? {...todo, entityStatus: action.entityStatus} : todo)
 
         case"TODO/SET-TODO":
             return action.todos.map(todo => {
-                return {...todo, filter: "all",entityStatus:"idle"}
+                return {...todo, filter: "all", entityStatus: "idle"}
             })
 
         default:
@@ -70,7 +71,7 @@ export const changeFilterTodoAC = (filter: filterType, id: string) => ({
     filter
 }) as const
 
-export const changeEntityStatusTodoAC = (entityStatus:EntityStatusType, id: string) => ({
+export const changeEntityStatusTodoAC = (entityStatus: EntityStatusType, id: string) => ({
     type: 'TODO/CHANGE-TODOLIST-ENTITY-STATUS',
     id,
     entityStatus
@@ -83,10 +84,10 @@ export const setTodosAC = (todosArray: Array<TodolistsType>) => ({
 }) as const
 
 
-export enum ServerResponseResultCode{
-    success=0,
-    error=1,
-    captcha=10
+export enum ServerResponseResultCode {
+    success = 0,
+    error = 1,
+    captcha = 10
 }
 
 export const setTodoTС = (): AppThunk => async dispatch => {
@@ -95,6 +96,7 @@ export const setTodoTС = (): AppThunk => async dispatch => {
         const res = await todolistApi.getTodolists()
         dispatch(setTodosAC(res.data))
     } catch (e: any) {
+        // handleServerNetworkError(e, dispatch)
         if (e.message === 'Network Error') {
             dispatch(setAppErrorAC("no connection!"))
         } else {
@@ -107,14 +109,12 @@ export const setTodoTС = (): AppThunk => async dispatch => {
 
 export const removeTodoTС = (todolistId: string): AppThunk => async dispatch => {
     dispatch(setAppStatusAC("loading"))
-    dispatch(changeEntityStatusTodoAC("loading",todolistId))
+    dispatch(changeEntityStatusTodoAC("loading", todolistId))
     try {
-        const res = await todolistApi.deleteTodolist(todolistId)
-        if (res.data.resultCode !== ServerResponseResultCode.success) {
-            throw new SyntaxError(res.data.messages[0])
-        }
+        await todolistApi.deleteTodolist(todolistId)
         dispatch(removeTodolistAC(todolistId))
     } catch (e: any) {
+        // handleServerNetworkError(e, dispatch)
         if (e.name === "SyntaxError") {
             dispatch(setAppErrorAC(e.message))
         } else if (e.message === 'Network Error') {
@@ -131,16 +131,18 @@ export const addTodoTС = (title: string): AppThunk => async dispatch => {
     dispatch(setAppStatusAC("loading"))
     try {
         const res = await todolistApi.createTodolist(title)
-        if (res.data.resultCode !== ServerResponseResultCode.success) {
-            throw new SyntaxError(res.data.messages[0])
-        }
         dispatch(addTodolistAC(res.data.data.item))
     } catch (e: any) {
+        console.log(e.name)
+        console.log(e)
+        // handleServerNetworkError(e, dispatch)
         if (e.name === "SyntaxError") {
+            console.log("1111111111")
             dispatch(setAppErrorAC(e.message))
         } else if (e.message === 'Network Error') {
             dispatch(setAppErrorAC("no connection!"))
         } else {
+            console.log("333333333333333333333")
             dispatch(setAppErrorAC("something error"))
         }
     } finally {
@@ -151,12 +153,10 @@ export const addTodoTС = (title: string): AppThunk => async dispatch => {
 export const changeTodoTС = (todolistId: string, title: string): AppThunk => async dispatch => {
     dispatch(setAppStatusAC("loading"))
     try {
-        const res = await todolistApi.updateTodolistTitle({todolistId, title})
-        if (res.data.resultCode !== ServerResponseResultCode.success) {
-            throw new SyntaxError(res.data.messages[0])
-        }
+        await todolistApi.updateTodolistTitle({todolistId, title})
         dispatch(changeTitleTodoAC(todolistId, title))
-    } catch (e:any) {
+    } catch (e: any) {
+        // handleServerNetworkError(e, dispatch)
         if (e.name === "SyntaxError") {
             dispatch(setAppErrorAC(e.message))
         } else if (e.message === 'Network Error') {

@@ -3,13 +3,17 @@ import {Dispatch} from "redux";
 
 
 export const handleServerNetworkError = (e:any,dispatch:Dispatch) :void=> {
+    console.log(e.name)
+    console.log(e)
     if (e.name === "SyntaxError") {
+        console.log("1111111111")
         dispatch(setAppErrorAC(e.message))
     }
     if (e.message === 'Network Error') {
+        console.log("qqqqqqqqqqqqqqqq")
         dispatch(setAppErrorAC("no connection!"))
     } else {
+        console.log("333333333333333333333")
         dispatch(setAppErrorAC("something error"))
     }
-} /////////////////     ///////////////////////////////////////////////////////////////////////////error question
-////можно ли делать такой проброс ошибки,если да то можно ли записать в синтаксис ошибку,если да как заставить эту функцию работать
+}
