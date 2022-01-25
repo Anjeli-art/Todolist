@@ -53,10 +53,14 @@ let initialGlobalState = {
     app: {
         status: "idle",
         error: null
+    },
+    auth: {
+        isLoggedIn: false,
+        isInitialized: false,
     }
 }
 
-export const storyBookStore = createStore(rootReducer, initialGlobalState as AppRootType,applyMiddleware(thunk))
+export const storyBookStore = createStore(rootReducer, initialGlobalState as AppRootType, applyMiddleware(thunk))
 
 
 export const ReduxStoreProviderDecorator = (storyFn: any) => {

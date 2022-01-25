@@ -12,22 +12,25 @@ import {AppRootType} from "../../app/store";
 import {Grid} from "@material-ui/core";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {Todolist} from "./Todolist/Todolist";
+import {Navigate} from "react-router-dom";
 
 type PropsType = {
     demo?: boolean
 }
 
 export const TodolistsList: React.FC<PropsType> = React.memo(({demo = false}) => {
+
+    const login = useSelector<AppRootType, boolean>(state => state.auth.isLoggedIn)
+    const dispatch = useDispatch()
+
     useEffect(() => {
-        if (demo) {
+        if (demo || !login) {
             return
         }
         dispatch(setTodoTС())
-    }, [])
+    }, [dispatch])
 
-    const dispatch = useDispatch()
     const todolists = useSelector<AppRootType, Array<TodolistsTypeEntity>>(state => state.todolists)
-
 
     const removeTodo = useCallback((todolistid: string) => {
         dispatch(removeTodoTС(todolistid))
@@ -44,6 +47,9 @@ export const TodolistsList: React.FC<PropsType> = React.memo(({demo = false}) =>
     const TodoChanged = useCallback((value: filterType, todolistid: string) => {
         dispatch(changeFilterTodoAC(value, todolistid))
     }, [dispatch])
+    if (!login) {
+        return <Navigate to={"login"}/>
+    }
 
     return (
         <>

@@ -1,6 +1,6 @@
 import {todolistApi, TodolistsType} from "../../API/todolistAPI";
 import {AppThunk} from "../../app/store";
-import {setAppErrorAC, setAppStatusAC} from "../../app/app-reducer";
+import {setAppStatusAC} from "../../app/app-reducer";
 import {handleServerNetworkError} from "../../utils/error-utils";
 
 export type TypeForTasksAction =
@@ -96,12 +96,7 @@ export const setTodoTС = (): AppThunk => async dispatch => {
         const res = await todolistApi.getTodolists()
         dispatch(setTodosAC(res.data))
     } catch (e: any) {
-        // handleServerNetworkError(e, dispatch)
-        if (e.message === 'Network Error') {
-            dispatch(setAppErrorAC("no connection!"))
-        } else {
-            dispatch(setAppErrorAC("something error"))
-        }
+        handleServerNetworkError(e, dispatch)
     } finally {
         dispatch(setAppStatusAC("success"))
     }
@@ -114,14 +109,7 @@ export const removeTodoTС = (todolistId: string): AppThunk => async dispatch =>
         await todolistApi.deleteTodolist(todolistId)
         dispatch(removeTodolistAC(todolistId))
     } catch (e: any) {
-        // handleServerNetworkError(e, dispatch)
-        if (e.name === "SyntaxError") {
-            dispatch(setAppErrorAC(e.message))
-        } else if (e.message === 'Network Error') {
-            dispatch(setAppErrorAC("no connection!"))
-        } else {
-            dispatch(setAppErrorAC("something error"))
-        }
+        handleServerNetworkError(e, dispatch)
     } finally {
         dispatch(setAppStatusAC("success"))
     }
@@ -133,18 +121,7 @@ export const addTodoTС = (title: string): AppThunk => async dispatch => {
         const res = await todolistApi.createTodolist(title)
         dispatch(addTodolistAC(res.data.data.item))
     } catch (e: any) {
-        console.log(e.name)
-        console.log(e)
-        // handleServerNetworkError(e, dispatch)
-        if (e.name === "SyntaxError") {
-            console.log("1111111111")
-            dispatch(setAppErrorAC(e.message))
-        } else if (e.message === 'Network Error') {
-            dispatch(setAppErrorAC("no connection!"))
-        } else {
-            console.log("333333333333333333333")
-            dispatch(setAppErrorAC("something error"))
-        }
+        handleServerNetworkError(e, dispatch)
     } finally {
         dispatch(setAppStatusAC("success"))
     }
@@ -156,14 +133,7 @@ export const changeTodoTС = (todolistId: string, title: string): AppThunk => as
         await todolistApi.updateTodolistTitle({todolistId, title})
         dispatch(changeTitleTodoAC(todolistId, title))
     } catch (e: any) {
-        // handleServerNetworkError(e, dispatch)
-        if (e.name === "SyntaxError") {
-            dispatch(setAppErrorAC(e.message))
-        } else if (e.message === 'Network Error') {
-            dispatch(setAppErrorAC("no connection!"))
-        } else {
-            dispatch(setAppErrorAC("something error"))
-        }
+        handleServerNetworkError(e, dispatch)
     } finally {
         dispatch(setAppStatusAC("success"))
     }

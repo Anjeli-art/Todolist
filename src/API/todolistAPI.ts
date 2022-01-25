@@ -69,6 +69,12 @@ export type UpdateTask = {
     deadline: string
 }
 
+export type LoginParamsType={
+    email: string,
+    password: string,
+    rememberMe?:boolean,
+    captcha?:string
+}
 
 export const todolistApi = {
     getTodolists() {
@@ -130,4 +136,31 @@ export const taskApi = {
             } else return res
         })
     }
+}
+
+export const authApi = {
+    createLogin(data:LoginParamsType) {
+        return instance.post<LoginParamsType,AxiosResponse<CommonResponseType<{ userId:number }>>>(`/auth/login`, data)
+            .then((res) => {
+            if (res.data.resultCode !== ServerResponseResultCode.success) {
+                throw new SyntaxError(res.data.messages[0])
+            } else return res
+        })
+    },
+    deleteLogin() {
+        return instance.delete<CommonResponseType>(`/auth/login`)
+            .then((res) => {
+            if (res.data.resultCode !== ServerResponseResultCode.success) {
+                throw new SyntaxError(res.data.messages[0])
+            } else return res
+        })
+    },
+    authMe() {
+        return instance.get<CommonResponseType<{ id: number, email: string, login: string }>>(`/auth/me`)
+            .then((res) => {
+            if (res.data.resultCode !== ServerResponseResultCode.success) {
+                throw new SyntaxError(res.data.messages[0])
+            } else return res
+        })
+    },
 }

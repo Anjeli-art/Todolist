@@ -1,7 +1,7 @@
 import {PriorytiesTask, taskApi, TasksStatuses, TasksType, UpdateTask} from "../../API/todolistAPI";
 import {AppRootType, AppThunk} from "../../app/store";
-import {ServerResponseResultCode, TypeForTasksAction} from "./todolist-reducer";
-import {setAppErrorAC, setAppStatusAC} from "../../app/app-reducer";
+import {TypeForTasksAction} from "./todolist-reducer";
+import {setAppStatusAC} from "../../app/app-reducer";
 import {handleServerNetworkError} from "../../utils/error-utils";
 
 
@@ -89,15 +89,7 @@ export const setTasksTC = (todolistId: string): AppThunk => async dispatch => {
         const res = await taskApi.getTask(todolistId)
         dispatch(setTaskAC(res.data.items, todolistId))
     } catch (e: any) {
-        // handleServerNetworkError(e, dispatch)
-        if (e.name === "SyntaxError") {
-            dispatch(setAppErrorAC(e.message))
-        } else if (e.message === 'Network Error') {
-            dispatch(setAppErrorAC("no connection!"))
-        } else {
-            dispatch(setAppErrorAC("something error"))
-        }
-
+        handleServerNetworkError(e, dispatch)
     } finally {
         dispatch(setAppStatusAC("success"))
     }
@@ -110,14 +102,7 @@ export const deleteTasksTC = (todolistId: string, taskid: string): AppThunk => a
         await taskApi.deleteTask(todolistId, taskid)
         dispatch(removeTaskAC(todolistId, taskid))
     } catch (e: any) {
-        // handleServerNetworkError(e, dispatch)
-        if (e.name === "SyntaxError") {
-            dispatch(setAppErrorAC(e.message))
-        } else if (e.message === 'Network Error') {
-            dispatch(setAppErrorAC("no connection!"))
-        } else {
-            dispatch(setAppErrorAC("something error"))
-        }
+        handleServerNetworkError(e, dispatch)
     } finally {
         dispatch(setAppStatusAC("success"))
     }
@@ -131,14 +116,7 @@ export const addTasksTC = (title: string, todolistId: string): AppThunk => async
         const res = await taskApi.createTask(title, todolistId)
         dispatch(addTaskAC(res.data.data.item))
     } catch (e: any) {
-        // handleServerNetworkError(e, dispatch)
-        if (e.name === "SyntaxError") {
-            dispatch(setAppErrorAC(e.message))
-        } else if (e.message === 'Network Error') {
-            dispatch(setAppErrorAC("no connection!"))
-        } else {
-            dispatch(setAppErrorAC("something error"))
-        }
+        handleServerNetworkError(e, dispatch)
     } finally {
         dispatch(setAppStatusAC("success"))
     }
@@ -177,14 +155,7 @@ export const updateTasksTC = (taskId: string, todolistId: string, model: UpdateT
                 dispatch(changedTaskAC(taskId, model, todolistId))
 
             } catch (e: any) {
-                // handleServerNetworkError(e, dispatch)
-                if (e.name === "SyntaxError") {
-                    dispatch(setAppErrorAC(e.message))
-                } else if (e.message === 'Network Error') {
-                    dispatch(setAppErrorAC("no connection!"))
-                } else {
-                    dispatch(setAppErrorAC("something error"))
-                }
+                handleServerNetworkError(e, dispatch)
             } finally {
                 dispatch(setAppStatusAC("success"))
             }

@@ -1,6 +1,5 @@
 import {Button, TextField} from '@material-ui/core';
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
-import {EntityStatusType} from "../../features/TodolistsList/todolist-reducer";
 
 
 export type AdditemformPropsType = {
