@@ -22,12 +22,12 @@ export type TodolistType = {
 
 export const Todolist: React.FC<TodolistType> = React.memo(({todo, TodoChanged, removeTodo, titleTodoStatus, demo}) => {
 
-    useEffect(() => {
-        if (demo) {
-            return
-        }
-        dispatch(setTasksTC(todo.id))
-    }, [])
+    // useEffect(() => {
+    //     if (demo) {
+    //         return
+    //     }
+    //     dispatch(setTasksTC(todo.id))
+    // }, [])
 
     const tasks = useSelector<AppRootType, Array<TasksType>>(state => state.tasks[todo.id])
     const dispatch = useDispatch()

@@ -2,6 +2,7 @@ import {AppThunk} from "../../app/store";
 import {setAppStatusAC} from "../../app/app-reducer";
 import {authApi, LoginParamsType} from "../../API/todolistAPI";
 import {handleServerNetworkError} from "../../utils/error-utils";
+import {clearTodolistDateAC} from "../TodolistsList/todolist-reducer";
 
 const initialstate = {
     isLoggedIn: false,
@@ -53,6 +54,7 @@ export const deleteLoginTC = (): AppThunk => async dispatch => {
     try {
         await authApi.deleteLogin()
         dispatch(setLoginAC(false))
+        dispatch(clearTodolistDateAC())
     } catch (e: any) {
         handleServerNetworkError(e, dispatch)
     } finally {

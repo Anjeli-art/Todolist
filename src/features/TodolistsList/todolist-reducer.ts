@@ -2,11 +2,13 @@ import {todolistApi, TodolistsType} from "../../API/todolistAPI";
 import {AppThunk} from "../../app/store";
 import {setAppStatusAC} from "../../app/app-reducer";
 import {handleServerNetworkError} from "../../utils/error-utils";
+import {setTasksTC} from "./tasks-reducer";
 
 export type TypeForTasksAction =
     ReturnType<typeof removeTodolistAC>
     | ReturnType<typeof addTodolistAC>
     | ReturnType<typeof setTodosAC>
+    | ReturnType<typeof clearTodolistDateAC>
 
 export type ActionTypeTodolists =
     | ReturnType<typeof changeTitleTodoAC>
@@ -43,7 +45,8 @@ export const todolistsReducer = (state: Array<TodolistsTypeEntity> = initialStat
             return action.todos.map(todo => {
                 return {...todo, filter: "all", entityStatus: "idle"}
             })
-
+        case "TODO/CLEAR-TODO-DATA":
+            return []
         default:
             return state
     }
@@ -84,6 +87,10 @@ export const setTodosAC = (todosArray: Array<TodolistsType>) => ({
 }) as const
 
 
+export const clearTodolistDateAC = () => ({
+    type: "TODO/CLEAR-TODO-DATA",
+}) as const
+
 export enum ServerResponseResultCode {
     success = 0,
     error = 1,
@@ -95,6 +102,9 @@ export const setTodoTС = (): AppThunk => async dispatch => {
     try {
         const res = await todolistApi.getTodolists()
         dispatch(setTodosAC(res.data))
+        res.data.forEach((todo) => {
+            dispatch(setTasksTC(todo.id))
+        })
     } catch (e: any) {
         handleServerNetworkError(e, dispatch)
     } finally {

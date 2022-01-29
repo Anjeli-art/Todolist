@@ -21,7 +21,7 @@ export function ErrorSnackbar() {
         }
         dispatch(setAppErrorAC(null));
     };
-    console.log(error)
+
     return (
         <Snackbar open={error !== null} autoHideDuration={8000} onClose={handleClose}>
             <Alert onClose={handleClose} severity="error" sx={{width: '100%'}}>
