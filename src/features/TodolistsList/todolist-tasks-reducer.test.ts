@@ -48,6 +48,6 @@ test("data should be cleaned", () => {
     const endTaskState = tasksReducer(startTaskState, action)
     const endTodoState = todolistsReducer(startTodoState, action)
 
-    expect(Object.keys(endTaskState).length == 0).toBeTruthy()
+    expect(Object.keys(endTaskState).length === 0).toBeTruthy()
     expect(endTodoState.length).toBe(0)
 })

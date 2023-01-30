@@ -52,7 +52,7 @@ export const tasksReducer = (state: TaskStateType = initialState, action: Action
             return {...state, [action.todolistId]: action.tasks}
 
         case "TODO/CLEAR-TODO-DATA":
-            return {}
+            return {    }
 
         default:
             return state
